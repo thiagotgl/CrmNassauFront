@@ -1,20 +1,36 @@
 export default function LoginPage() {
   return (
     <div style={styles.container}>
+      <div style={styles.overlay} />
+
       <div style={styles.card}>
-        <h1 style={styles.title}>Nassau CRM</h1>
-        <p style={styles.subtitle}>Acesse sua conta</p>
+        <div style={styles.header}>
+          <h1 style={styles.title}>GLOBAL CRM</h1>
+          <p style={styles.subtitle}>Acesse sua conta</p>
+        </div>
 
         <form style={styles.form}>
-          <input type="email" placeholder="E-mail" style={styles.input} />
-          <input type="password" placeholder="Senha" style={styles.input} />
+          <input
+            type="email"
+            placeholder="E-mail"
+            style={styles.input}
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            style={styles.input}
+          />
 
           <button style={styles.button}>
             Entrar
           </button>
         </form>
 
-        <p style={styles.footer}>© Nassau Tecnologia</p>
+        <div style={styles.footer}>
+          <p>Suporte: (81) 2011-6699</p>
+          <span>© Nassau Tecnologia</span>
+        </div>
       </div>
     </div>
   );
@@ -23,48 +39,85 @@ export default function LoginPage() {
 const styles: any = {
   container: {
     height: '100vh',
-    background: 'linear-gradient(135deg, #0f172a, #1e293b, #3b82f6)',
+    background: 'linear-gradient(135deg, #020617, #0f172a, #1e3a8a)',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden'
   },
+
+  overlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    background: 'radial-gradient(circle at top, rgba(59,130,246,0.25), transparent)',
+    zIndex: 0
+  },
+
   card: {
-    background: '#fff',
+    position: 'relative',
+    zIndex: 1,
+    background: 'rgba(255,255,255,0.05)',
+    backdropFilter: 'blur(12px)',
     padding: '40px',
     borderRadius: '16px',
-    width: '350px',
+    width: '360px',
     textAlign: 'center',
-    boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+    boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+    border: '1px solid rgba(255,255,255,0.1)',
+    color: '#fff'
   },
+
+  header: {
+    marginBottom: '25px'
+  },
+
   title: {
-    marginBottom: '5px'
+    fontSize: '28px',
+    fontWeight: 'bold',
+    marginBottom: '5px',
+    letterSpacing: '1px'
   },
+
   subtitle: {
-    marginBottom: '20px',
-    color: '#666'
+    fontSize: '14px',
+    color: '#cbd5f5'
   },
+
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px'
+    gap: '14px'
   },
+
   input: {
     padding: '12px',
     borderRadius: '8px',
-    border: '1px solid #ddd'
+    border: '1px solid rgba(255,255,255,0.2)',
+    background: 'rgba(255,255,255,0.08)',
+    color: '#fff',
+    outline: 'none'
   },
+
   button: {
+    marginTop: '10px',
     padding: '12px',
     borderRadius: '8px',
     border: 'none',
-    background: '#3b82f6',
+    background: 'linear-gradient(90deg, #3b82f6, #2563eb)',
     color: '#fff',
     fontWeight: 'bold',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    transition: '0.3s',
   },
+
   footer: {
-    marginTop: '20px',
+    marginTop: '25px',
     fontSize: '12px',
-    color: '#999'
+    color: '#cbd5f5',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px'
   }
 };
