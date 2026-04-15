@@ -1,15 +1,36 @@
+import { useEffect } from "react";
+
 export default function LoginPage() {
+
+  useEffect(() => {
+    const move = (e: any) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+
+      document.documentElement.style.setProperty('--x', `${x * 100}%`);
+      document.documentElement.style.setProperty('--y', `${y * 100}%`);
+    };
+
+    window.addEventListener('mousemove', move);
+    return () => window.removeEventListener('mousemove', move);
+  }, []);
+
   return (
     <div style={styles.container}>
-      <div style={styles.overlay} />
 
-      <div style={styles.card}>
-        <div style={styles.header}>
-          <h1 style={styles.title}>GLOBAL CRM</h1>
-          <p style={styles.subtitle}>Acesse sua conta</p>
-        </div>
+      <div style={styles.left}>
+        <h1 style={styles.brand}>GLOBAL CRM</h1>
+        <p style={styles.description}>
+          Gestão inteligente de clientes, vendas e operações.
+        </p>
 
+        <div style={styles.glow} />
+      </div>
+
+      <div style={styles.right}>
         <form style={styles.form}>
+          <h2 style={styles.loginTitle}>Entrar</h2>
+
           <input
             type="email"
             placeholder="E-mail"
@@ -23,81 +44,95 @@ export default function LoginPage() {
           />
 
           <button style={styles.button}>
-            Entrar
+            Acessar sistema
           </button>
-        </form>
 
-        <div style={styles.footer}>
-          <p>Suporte: (81) 2011-6699</p>
-          <span>© Nassau Tecnologia</span>
-        </div>
+          <div style={styles.footer}>
+            <p>Suporte: (81) 2011-6699</p>
+            <span>© Nassau Tecnologia</span>
+          </div>
+        </form>
       </div>
+
     </div>
   );
 }
 
 const styles: any = {
+
   container: {
     height: '100vh',
-    background: 'linear-gradient(135deg, #020617, #0f172a, #1e3a8a)',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-    overflow: 'hidden'
+    fontFamily: 'sans-serif',
+    background: 'radial-gradient(circle at var(--x, 50%) var(--y, 50%), #1e3a8a, #020617)',
+    transition: 'background 0.2s'
   },
 
-  overlay: {
+  // LADO ESQUERDO (BRANDING)
+  left: {
+    flex: 1,
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '80px',
+    position: 'relative'
+  },
+
+  brand: {
+    fontSize: '52px',
+    fontWeight: '800',
+    letterSpacing: '2px',
+    marginBottom: '10px'
+  },
+
+  description: {
+    fontSize: '18px',
+    color: '#cbd5f5',
+    maxWidth: '400px'
+  },
+
+  glow: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
-    background: 'radial-gradient(circle at top, rgba(59,130,246,0.25), transparent)',
+    width: '400px',
+    height: '400px',
+    background: 'radial-gradient(circle, rgba(59,130,246,0.4), transparent)',
+    filter: 'blur(100px)',
+    top: '20%',
+    left: '10%',
     zIndex: 0
   },
 
-  card: {
-    position: 'relative',
-    zIndex: 1,
-    background: 'rgba(255,255,255,0.05)',
-    backdropFilter: 'blur(12px)',
-    padding: '40px',
-    borderRadius: '16px',
-    width: '360px',
-    textAlign: 'center',
-    boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    color: '#fff'
-  },
-
-  header: {
-    marginBottom: '25px'
-  },
-
-  title: {
-    fontSize: '28px',
-    fontWeight: 'bold',
-    marginBottom: '5px',
-    letterSpacing: '1px'
-  },
-
-  subtitle: {
-    fontSize: '14px',
-    color: '#cbd5f5'
+  // LADO DIREITO (LOGIN)
+  right: {
+    width: '420px',
+    background: '#ffffff',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   form: {
+    width: '100%',
+    maxWidth: '300px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '14px'
+    gap: '15px'
+  },
+
+  loginTitle: {
+    fontSize: '22px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    color: '#0f172a'
   },
 
   input: {
     padding: '12px',
     borderRadius: '8px',
-    border: '1px solid rgba(255,255,255,0.2)',
-    background: 'rgba(255,255,255,0.08)',
-    color: '#fff',
-    outline: 'none'
+    border: '1px solid #ddd',
+    outline: 'none',
+    fontSize: '14px'
   },
 
   button: {
@@ -105,19 +140,20 @@ const styles: any = {
     padding: '12px',
     borderRadius: '8px',
     border: 'none',
-    background: 'linear-gradient(90deg, #3b82f6, #2563eb)',
+    background: 'linear-gradient(90deg, #2563eb, #1e40af)',
     color: '#fff',
     fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: '0.3s',
+    cursor: 'pointer'
   },
 
   footer: {
-    marginTop: '25px',
+    marginTop: '20px',
     fontSize: '12px',
-    color: '#cbd5f5',
+    color: '#64748b',
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px'
+    gap: '4px',
+    textAlign: 'center'
   }
+
 };
