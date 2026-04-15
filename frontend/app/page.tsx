@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const move = (e: any) => {
@@ -17,36 +19,62 @@ export default function LoginPage() {
     return () => window.removeEventListener('mousemove', move);
   }, []);
 
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // simulação (depois você conecta no backend)
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  };
+
   return (
     <div style={styles.container}>
 
       <div style={styles.left}>
         <h1 style={styles.brand}>GLOBAL CRM</h1>
         <p style={styles.description}>
-          Gestão inteligente de clientes, vendas e operações.
+          Gestão inteligente de clientes e operações.
         </p>
-
-        <div style={styles.glow} />
       </div>
 
       <div style={styles.right}>
-        <form style={styles.form}>
+        <form style={styles.form} onSubmit={handleLogin}>
           <h2 style={styles.loginTitle}>Entrar</h2>
 
-          <input
-            type="email"
-            placeholder="E-mail"
-            style={styles.input}
-          />
+          <div style={styles.field}>
+            <label style={styles.label}>E-mail</label>
+            <input
+              type="email"
+              placeholder="Digite seu e-mail"
+              style={styles.input}
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Senha"
-            style={styles.input}
-          />
+          <div style={styles.field}>
+            <label style={styles.label}>Senha</label>
 
-          <button style={styles.button}>
-            Acessar sistema
+            <div style={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Digite sua senha"
+                style={styles.input}
+                required
+              />
+
+              <span
+                style={styles.eye}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
+          </div>
+
+          <button style={styles.button} disabled={loading}>
+            {loading ? "Entrando..." : "Acessar sistema"}
           </button>
 
           <div style={styles.footer}>
@@ -61,7 +89,6 @@ export default function LoginPage() {
 }
 
 const styles: any = {
-
   container: {
     height: '100vh',
     display: 'flex',
@@ -70,15 +97,13 @@ const styles: any = {
     transition: 'background 0.2s'
   },
 
-  // LADO ESQUERDO (BRANDING)
   left: {
     flex: 1,
     color: '#fff',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    padding: '80px',
-    position: 'relative'
+    padding: '80px'
   },
 
   brand: {
@@ -94,18 +119,6 @@ const styles: any = {
     maxWidth: '400px'
   },
 
-  glow: {
-    position: 'absolute',
-    width: '400px',
-    height: '400px',
-    background: 'radial-gradient(circle, rgba(59,130,246,0.4), transparent)',
-    filter: 'blur(100px)',
-    top: '20%',
-    left: '10%',
-    zIndex: 0
-  },
-
-  // LADO DIREITO (LOGIN)
   right: {
     width: '420px',
     background: '#ffffff',
@@ -129,23 +142,52 @@ const styles: any = {
     color: '#0f172a'
   },
 
+  field: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '4px'
+  },
+
+  label: {
+    fontSize: '13px',
+    fontWeight: '500',
+    color: '#334155'
+  },
+
   input: {
+    width: '100%',
     padding: '12px',
     borderRadius: '8px',
-    border: '1px solid #ddd',
+    border: '1px solid #cbd5e1',
     outline: 'none',
+    fontSize: '14px'
+  },
+
+  passwordWrapper: {
+    position: 'relative',
+    width: '100%'
+  },
+
+  eye: {
+    position: 'absolute',
+    right: '10px',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    cursor: 'pointer',
     fontSize: '14px'
   },
 
   button: {
     marginTop: '10px',
     padding: '12px',
-    borderRadius: '8px',
+    borderRadius: '10px',
     border: 'none',
-    background: 'linear-gradient(90deg, #2563eb, #1e40af)',
+    background: '#2563eb',
     color: '#fff',
-    fontWeight: 'bold',
-    cursor: 'pointer'
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: '0.2s'
   },
 
   footer: {
@@ -157,5 +199,4 @@ const styles: any = {
     gap: '4px',
     textAlign: 'center'
   }
-
 };
