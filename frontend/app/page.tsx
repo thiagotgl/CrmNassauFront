@@ -14,8 +14,8 @@ const x = e.clientX / window.innerWidth;
 const y = e.clientY / window.innerHeight;
 
 
-  document.documentElement.style.setProperty('--x', ${x * 100}%);
-  document.documentElement.style.setProperty('--y', ${y * 100}%);
+  document.documentElement.style.setProperty('--x', `${x * 100}%`);
+document.documentElement.style.setProperty('--y', `${y * 100}%`);
 };
 
 window.addEventListener('mousemove', move);
