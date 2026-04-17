@@ -1,12 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import React, { useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
-  const [openConfig, setOpenConfig] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  const isConfigRoute = useMemo(
+    () =>
+      pathname === "/crm/config_user" ||
+      pathname === "/crm/config_unidades",
+    [pathname],
+  );
+
+  const [openConfig, setOpenConfig] = useState(isConfigRoute);
+
+  const isLeadsRoute = pathname === "/crm/leads";
+  const isConfigUserRoute = pathname === "/crm/config_user";
+  const isConfigUnidadesRoute = pathname === "/crm/config_unidades";
+
+  const configIsOpen = openConfig || isConfigRoute;
 
   return (
     <>
@@ -63,6 +77,7 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           font-size: 14px;
           border-radius: 8px;
           cursor: pointer;
+          transition: 0.2s;
         }
 
         .submenu-item:hover {
@@ -86,8 +101,6 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
       `}</style>
 
       <div style={containerStyle}>
-        
-        {/* SIDEBAR */}
         <div style={sidebarStyle}>
           <div style={logoContainer}>
             <h1 style={brandStyle}>GLOBAL CRM</h1>
@@ -95,16 +108,13 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div style={{ marginTop: "40px" }}>
-            
-            {/* Leads */}
             <div
-              className={`menu-item ${pathname === "/crm/leads" ? "active" : ""}`}
+              className={`menu-item ${isLeadsRoute ? "active" : ""}`}
               onClick={() => router.push("/crm/leads")}
             >
               <span>Leads</span>
             </div>
 
-            {/* Negociações */}
             <div
               className="menu-item"
               onClick={() => router.push("/crm/negociacoes")}
@@ -112,7 +122,6 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
               <span>Negociações</span>
             </div>
 
-            {/* Contatos */}
             <div
               className="menu-item"
               onClick={() => router.push("/crm/contatos")}
@@ -120,7 +129,6 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
               <span>Contatos / Empresas</span>
             </div>
 
-            {/* Dashboards */}
             <div
               className="menu-item"
               onClick={() => router.push("/crm/dashboards")}
@@ -128,49 +136,42 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
               <span>Dashboards</span>
             </div>
 
-            {/* CONFIG */}
             <div>
               <div
-                className="menu-item"
-                onClick={() => setOpenConfig(!openConfig)}
+                className={`menu-item ${isConfigRoute ? "active" : ""}`}
+                onClick={() => setOpenConfig((current) => !current)}
               >
                 <span>Configurações</span>
 
-                <span className={`arrow ${openConfig ? "open" : ""}`}>
+                <span className={`arrow ${configIsOpen ? "open" : ""}`}>
                   ▼
                 </span>
               </div>
 
-              <div className={`submenu ${openConfig ? "open" : ""}`}>
+              <div className={`submenu ${configIsOpen ? "open" : ""}`}>
                 <div
-                  className="submenu-item"
+                  className={`submenu-item ${isConfigUserRoute ? "active" : ""}`}
                   onClick={() => router.push("/crm/config_user")}
                 >
                   Cadastro de Usuários
                 </div>
 
                 <div
-                  className="submenu-item"
+                  className={`submenu-item ${isConfigUnidadesRoute ? "active" : ""}`}
                   onClick={() => router.push("/crm/config_unidades")}
                 >
                   Cadastro de Unidades
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
-        {/* CONTEÚDO */}
-        <div style={contentStyle}>
-          {children}
-        </div>
+        <div style={contentStyle}>{children}</div>
       </div>
     </>
   );
 }
-
-/* ===== ESTILOS ===== */
 
 const containerStyle: React.CSSProperties = {
   display: "flex",
