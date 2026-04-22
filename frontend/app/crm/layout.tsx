@@ -2,10 +2,12 @@
 
 import React, { useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   const isConfigRoute = useMemo(
     () =>
@@ -105,6 +107,18 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
           <div style={logoContainer}>
             <h1 style={brandStyle}>GLOBAL CRM</h1>
             <div style={logoUnderline}></div>
+          </div>
+
+          <div style={sessionBoxStyle}>
+            <div style={sessionEmailStyle}>
+              {session?.user?.email ?? "Sessão autenticada"}
+            </div>
+            <button
+              style={logoutStyle}
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              Sair
+            </button>
           </div>
 
           <div style={{ marginTop: "40px" }}>
@@ -215,4 +229,26 @@ const contentStyle: React.CSSProperties = {
   flex: 1,
   padding: "40px",
   color: "#fff",
+};
+
+const sessionBoxStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  marginBottom: "24px",
+};
+
+const sessionEmailStyle: React.CSSProperties = {
+  fontSize: "13px",
+  color: "#cbd5e1",
+  wordBreak: "break-word",
+};
+
+const logoutStyle: React.CSSProperties = {
+  borderRadius: "999px",
+  border: "1px solid rgba(255,255,255,0.18)",
+  background: "rgba(255,255,255,0.08)",
+  color: "#fff",
+  cursor: "pointer",
+  padding: "10px 14px",
 };

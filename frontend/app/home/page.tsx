@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import React from "react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Hub() {
   const router = useRouter();
+  const { data: session } = useSession();
 
   return (
     <>
@@ -59,6 +61,18 @@ export default function Hub() {
         <div style={logoContainer}>
           <h1 style={brandStyle}>GLOBAL CRM</h1>
           <div style={logoUnderline}></div>
+        </div>
+
+        <div style={userPanelStyle}>
+          <span style={userTextStyle}>
+            {session?.user?.email ?? "Sessão ativa"}
+          </span>
+          <button
+            style={logoutButtonStyle}
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            Sair
+          </button>
         </div>
 
         <h1 style={titleStyle}>Escolha um sistema</h1>
@@ -139,6 +153,29 @@ const titleStyle: React.CSSProperties = {
   marginBottom: "60px",
   fontSize: "34px",
   fontWeight: "600",
+};
+
+const userPanelStyle: React.CSSProperties = {
+  position: "absolute",
+  top: "30px",
+  right: "30px",
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+};
+
+const userTextStyle: React.CSSProperties = {
+  color: "#e2e8f0",
+  fontSize: "14px",
+};
+
+const logoutButtonStyle: React.CSSProperties = {
+  border: "1px solid rgba(255,255,255,0.25)",
+  background: "rgba(255,255,255,0.08)",
+  color: "#fff",
+  borderRadius: "999px",
+  padding: "10px 16px",
+  cursor: "pointer",
 };
 
 const cardStyle: React.CSSProperties = {

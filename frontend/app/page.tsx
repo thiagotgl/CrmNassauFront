@@ -6,22 +6,17 @@ import type {
   MouseEvent as ReactMouseEvent,
 } from "react";
 import { useEffect, useState } from "react";
-
-type LoginResponse = {
-  message?: string;
-  token?: string;
-  access_token?: string;
-  data?: {
-    token?: string;
-    access_token?: string;
-  };
-};
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { status } = useSession();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [hoverEmail, setHoverEmail] = useState(false);
   const [hoverSenha, setHoverSenha] = useState(false);
   const [hoverButton, setHoverButton] = useState(false);
@@ -42,36 +37,36 @@ export default function LoginPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/home");
+    }
+  }, [router, status]);
+
   const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+    setLoginError("");
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, senha }),
+      const callbackUrl =
+        new URLSearchParams(window.location.search).get("callbackUrl") || "/home";
+      const result = await signIn("credentials", {
+        email,
+        senha,
+        redirect: false,
+        callbackUrl,
       });
 
-      const data = (await response.json()) as LoginResponse;
-
-      if (!response.ok) {
-        throw new Error(data.message || "Erro ao logar");
+      if (!result || result.error) {
+        throw new Error("E-mail ou senha inválidos.");
       }
 
-      const token =
-        data.token ??
-        data.access_token ??
-        data.data?.token ??
-        data.data?.access_token;
-
-      console.log("Token da API:", token);
-      window.location.href = "/home";
+      router.push(result.url || callbackUrl);
+      router.refresh();
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Erro ao logar";
-      alert(message);
+      setLoginError(message);
     } finally {
       setLoading(false);
     }
@@ -175,6 +170,8 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            {loginError ? <p style={styles.errorText}>{loginError}</p> : null}
 
             <button
               style={{
@@ -320,5 +317,10 @@ const styles: Record<string, CSSProperties> = {
     flexDirection: "column",
     gap: "4px",
     textAlign: "center",
+  },
+  errorText: {
+    fontSize: "13px",
+    color: "#b91c1c",
+    margin: 0,
   },
 };
