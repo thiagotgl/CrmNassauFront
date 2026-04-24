@@ -110,7 +110,13 @@ export default function LoginPage() {
       <div style={styles.container}>
         <div style={styles.left}>
           <div style={styles.logoWrapper}>
-            <h1 style={styles.brand}>GLOBAL CRM</h1>
+            <button
+              type="button"
+              style={styles.brand}
+              onClick={() => router.push("/home")}
+            >
+              GLOBAL CRM
+            </button>
             <div style={styles.logoUnderline}></div>
           </div>
 
@@ -222,6 +228,9 @@ const styles: Record<string, CSSProperties> = {
     marginBottom: "20px",
   },
   brand: {
+    border: "none",
+    padding: 0,
+    cursor: "pointer",
     fontSize: "56px",
     fontWeight: "900",
     letterSpacing: "3px",
