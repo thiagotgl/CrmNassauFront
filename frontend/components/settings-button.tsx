@@ -4,10 +4,20 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { Settings, X } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { UserList } from "@/components/user-list";
 import { UserRegistrationForm } from "@/components/user-registration-form";
 
+type SettingsTab = "cadastro" | "usuarios";
+
 export function SettingsButton() {
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<SettingsTab>("cadastro");
+
+  if (session?.user?.tipo !== "admin") {
+    return null;
+  }
 
   return (
     <>
@@ -34,8 +44,23 @@ export function SettingsButton() {
               <div style={windowStyle}>
                 <div style={headerStyle}>
                   <div style={tabsStyle}>
-                    <button type="button" style={activeTabStyle}>
+                    <button
+                      type="button"
+                      style={
+                        activeTab === "cadastro" ? activeTabStyle : tabStyle
+                      }
+                      onClick={() => setActiveTab("cadastro")}
+                    >
                       Cadastro de usuario
+                    </button>
+                    <button
+                      type="button"
+                      style={
+                        activeTab === "usuarios" ? activeTabStyle : tabStyle
+                      }
+                      onClick={() => setActiveTab("usuarios")}
+                    >
+                      Listagem de usuarios
                     </button>
                   </div>
 
@@ -51,7 +76,11 @@ export function SettingsButton() {
                 </div>
 
                 <div style={contentStyle}>
-                  <UserRegistrationForm />
+                  {activeTab === "cadastro" ? (
+                    <UserRegistrationForm />
+                  ) : (
+                    <UserList />
+                  )}
                 </div>
               </div>
             </div>,
@@ -129,6 +158,13 @@ const activeTabStyle: CSSProperties = {
   padding: "12px 14px",
   fontWeight: 700,
   cursor: "pointer",
+};
+
+const tabStyle: CSSProperties = {
+  ...activeTabStyle,
+  borderBottom: "2px solid transparent",
+  color: "#6b7280",
+  fontWeight: 600,
 };
 
 const closeButtonStyle: CSSProperties = {

@@ -135,9 +135,6 @@ export function UserRegistrationForm() {
       {toast ? <div style={toastStyle}>{toast}</div> : null}
 
       <div>
-        <h1 style={title}>Cadastro de Usuarios</h1>
-        <p style={subtitle}>Preencha os dados para criar um novo usuario</p>
-
         <form onSubmit={handleSubmit} style={formStyle}>
           <div style={grid}>
             <Input
@@ -279,18 +276,6 @@ function Select({ label, value, onChange, options }: SelectProps) {
     </div>
   );
 }
-
-const title: CSSProperties = {
-  fontSize: "26px",
-  marginBottom: "5px",
-  color: "#111",
-};
-
-const subtitle: CSSProperties = {
-  fontSize: "14px",
-  color: "#666",
-  marginBottom: "25px",
-};
 
 const formStyle: CSSProperties = {
   display: "flex",

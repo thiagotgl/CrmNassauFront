@@ -9,6 +9,7 @@ type BackendLoginResponse = {
     id?: string | number;
     name?: string;
     email?: string;
+    tipo?: string;
   };
   data?: {
     token?: string;
@@ -17,9 +18,37 @@ type BackendLoginResponse = {
       id?: string | number;
       name?: string;
       email?: string;
+      tipo?: string;
     };
   };
 };
+
+function getTipoFromAccessToken(accessToken?: unknown) {
+  if (typeof accessToken !== "string") {
+    return undefined;
+  }
+
+  const [, payload] = accessToken.split(".");
+
+  if (!payload) {
+    return undefined;
+  }
+
+  try {
+    const normalizedPayload = payload
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .padEnd(Math.ceil(payload.length / 4) * 4, "=");
+    const decodedPayload = Buffer.from(normalizedPayload, "base64").toString(
+      "utf8",
+    );
+    const data = JSON.parse(decodedPayload) as { tipo?: unknown };
+
+    return typeof data.tipo === "string" ? data.tipo : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -79,6 +108,7 @@ export const authOptions: NextAuthOptions = {
           id: String(user?.id ?? email),
           name: user?.name ?? email,
           email: user?.email ?? email,
+          tipo: user?.tipo,
           accessToken,
         };
       },
@@ -88,6 +118,9 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = user.accessToken;
+        token.tipo = user.tipo ?? getTipoFromAccessToken(user.accessToken);
+      } else if (!token.tipo) {
+        token.tipo = getTipoFromAccessToken(token.accessToken);
       }
 
       return token;
@@ -99,6 +132,10 @@ export const authOptions: NextAuthOptions = {
 
       if (typeof token.accessToken === "string") {
         session.accessToken = token.accessToken;
+      }
+
+      if (session.user && typeof token.tipo === "string") {
+        session.user.tipo = token.tipo;
       }
 
       return session;

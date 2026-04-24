@@ -9,16 +9,19 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      tipo?: string;
     };
   }
 
   interface User {
     accessToken?: string;
+    tipo?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     accessToken?: string;
+    tipo?: string;
   }
 }
