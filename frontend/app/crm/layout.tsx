@@ -1,28 +1,13 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { UserSessionFooter } from "@/components/user-session-footer";
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: session } = useSession();
-
-  const isConfigRoute = useMemo(
-    () =>
-      pathname === "/crm/config_user" ||
-      pathname === "/crm/config_unidades",
-    [pathname],
-  );
-
-  const [openConfig, setOpenConfig] = useState(isConfigRoute);
-
   const isLeadsRoute = pathname === "/crm/leads";
-  const isConfigUserRoute = pathname === "/crm/config_user";
-  const isConfigUnidadesRoute = pathname === "/crm/config_unidades";
-
-  const configIsOpen = openConfig || isConfigRoute;
 
   return (
     <>
@@ -58,70 +43,22 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
         .active {
           background: rgba(255,255,255,0.2);
         }
-
-        .submenu {
-          margin-left: 15px;
-          overflow: hidden;
-          max-height: 0;
-          opacity: 0;
-          transform: translateY(-5px);
-          transition: all 0.3s ease;
-        }
-
-        .submenu.open {
-          max-height: 200px;
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .submenu-item {
-          padding: 8px 12px;
-          font-size: 14px;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: 0.2s;
-        }
-
-        .submenu-item:hover {
-          background: rgba(255,255,255,0.1);
-        }
-
-        .arrow {
-          opacity: 0;
-          transition: all 0.3s ease;
-          font-size: 12px;
-        }
-
-        .menu-item:hover .arrow {
-          opacity: 1;
-        }
-
-        .arrow.open {
-          transform: rotate(180deg);
-          opacity: 1;
-        }
       `}</style>
 
       <div style={containerStyle}>
         <div style={sidebarStyle}>
           <div style={logoContainer}>
-            <h1 style={brandStyle}>GLOBAL CRM</h1>
+            <button
+              type="button"
+              style={brandStyle}
+              onClick={() => router.push("/home")}
+            >
+              GLOBAL CRM
+            </button>
             <div style={logoUnderline}></div>
           </div>
 
-          <div style={sessionBoxStyle}>
-            <div style={sessionEmailStyle}>
-              {session?.user?.email ?? "Sessão autenticada"}
-            </div>
-            <button
-              style={logoutStyle}
-              onClick={() => signOut({ callbackUrl: "/" })}
-            >
-              Sair
-            </button>
-          </div>
-
-          <div style={{ marginTop: "40px" }}>
+          <div style={menuContentStyle}>
             <div
               className={`menu-item ${isLeadsRoute ? "active" : ""}`}
               onClick={() => router.push("/crm/leads")}
@@ -129,56 +66,20 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
               <span>Leads</span>
             </div>
 
-            <div
-              className="menu-item"
-              onClick={() => router.push("/crm/negociacoes")}
-            >
-              <span>Negociações</span>
+            <div className="menu-item">
+              <span>Negociacoes</span>
             </div>
 
-            <div
-              className="menu-item"
-              onClick={() => router.push("/crm/contatos")}
-            >
+            <div className="menu-item">
               <span>Contatos / Empresas</span>
             </div>
 
-            <div
-              className="menu-item"
-              onClick={() => router.push("/crm/dashboards")}
-            >
+            <div className="menu-item">
               <span>Dashboards</span>
             </div>
-
-            <div>
-              <div
-                className={`menu-item ${isConfigRoute ? "active" : ""}`}
-                onClick={() => setOpenConfig((current) => !current)}
-              >
-                <span>Configurações</span>
-
-                <span className={`arrow ${configIsOpen ? "open" : ""}`}>
-                  ▼
-                </span>
-              </div>
-
-              <div className={`submenu ${configIsOpen ? "open" : ""}`}>
-                <div
-                  className={`submenu-item ${isConfigUserRoute ? "active" : ""}`}
-                  onClick={() => router.push("/crm/config_user")}
-                >
-                  Cadastro de Usuários
-                </div>
-
-                <div
-                  className={`submenu-item ${isConfigUnidadesRoute ? "active" : ""}`}
-                  onClick={() => router.push("/crm/config_unidades")}
-                >
-                  Cadastro de Unidades
-                </div>
-              </div>
-            </div>
           </div>
+
+          <UserSessionFooter />
         </div>
 
         <div style={contentStyle}>{children}</div>
@@ -190,6 +91,7 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
 const containerStyle: React.CSSProperties = {
   display: "flex",
   height: "100vh",
+  overflow: "hidden",
   fontFamily: "Poppins, sans-serif",
   background: "linear-gradient(270deg, #1e293b, #1e40af, #0f172a)",
 };
@@ -200,13 +102,26 @@ const sidebarStyle: React.CSSProperties = {
   color: "#fff",
   backdropFilter: "blur(10px)",
   background: "rgba(0,0,0,0.2)",
+  display: "flex",
+  flexDirection: "column",
+  maxHeight: "100vh",
+  boxSizing: "border-box",
 };
 
 const logoContainer: React.CSSProperties = {
   marginBottom: "20px",
 };
 
+const menuContentStyle: React.CSSProperties = {
+  flex: 1,
+  marginTop: "20px",
+  overflowY: "auto",
+};
+
 const brandStyle: React.CSSProperties = {
+  border: "none",
+  padding: 0,
+  cursor: "pointer",
   fontSize: "22px",
   fontWeight: "900",
   letterSpacing: "2px",
@@ -229,26 +144,6 @@ const contentStyle: React.CSSProperties = {
   flex: 1,
   padding: "40px",
   color: "#fff",
-};
-
-const sessionBoxStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px",
-  marginBottom: "24px",
-};
-
-const sessionEmailStyle: React.CSSProperties = {
-  fontSize: "13px",
-  color: "#cbd5e1",
-  wordBreak: "break-word",
-};
-
-const logoutStyle: React.CSSProperties = {
-  borderRadius: "999px",
-  border: "1px solid rgba(255,255,255,0.18)",
-  background: "rgba(255,255,255,0.08)",
-  color: "#fff",
-  cursor: "pointer",
-  padding: "10px 14px",
+  minWidth: 0,
+  overflow: "hidden",
 };
