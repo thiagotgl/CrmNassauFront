@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import {
   DragDropContext,
   Draggable,
@@ -56,7 +57,7 @@ export default function LeadsPage() {
   }
 
   return (
-    <div>
+    <div style={pageStyle}>
       <h1 style={titleStyle}>Leads</h1>
 
       <DragDropContext onDragEnd={onDragEnd}>
@@ -78,9 +79,10 @@ export default function LeadsPage() {
                       boxShadow: snapshot.isDraggingOver
                         ? `0 0 0 2px ${coluna.cor} inset`
                         : "none",
-                      zIndex:
-                        snapshot.isDraggingOver || snapshot.draggingFromThisWith
-                          ? 10
+                      zIndex: snapshot.draggingFromThisWith
+                        ? 30
+                        : snapshot.isDraggingOver
+                          ? 5
                           : 1,
                       transition: "background 0.2s, box-shadow 0.2s",
                     }}
@@ -104,14 +106,16 @@ export default function LeadsPage() {
                             index={index}
                           >
                             {(provided, snapshot) => {
-                              return (
+                              const draggableCard = (
                                 <div
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                   style={{
                                     ...cardStyle,
+                                    width: snapshot.isDragging ? undefined : "100%",
                                     ...provided.draggableProps.style,
+                                    boxSizing: "border-box",
 
                                     // efeitos visuais separados sem quebrar o transform do dnd
                                     boxShadow: snapshot.isDragging
@@ -131,6 +135,15 @@ export default function LeadsPage() {
                                   </div>
                                 </div>
                               );
+
+                              if (
+                                snapshot.isDragging &&
+                                typeof document !== "undefined"
+                              ) {
+                                return createPortal(draggableCard, document.body);
+                              }
+
+                              return draggableCard;
                             }}
                           </Draggable>
                         ))}
@@ -160,9 +173,16 @@ const titleStyle: React.CSSProperties = {
   marginBottom: "20px",
 };
 
+const pageStyle: React.CSSProperties = {
+  height: "100%",
+  overflow: "hidden",
+};
+
 const kanbanContainer: React.CSSProperties = {
   display: "flex",
   gap: "20px",
+  height: "calc(100% - 54px)",
+  overflow: "visible",
 };
 
 const columnWrapper: React.CSSProperties = {
@@ -174,6 +194,7 @@ const columnWrapper: React.CSSProperties = {
   backdropFilter: "blur(10px)",
   display: "flex",
   flexDirection: "column",
+  minWidth: 0,
 };
 
 const columnHeader: React.CSSProperties = {
@@ -188,6 +209,7 @@ const columnBody: React.CSSProperties = {
   minHeight: "150px",
   display: "flex",
   flexDirection: "column",
+  overflow: "visible",
 };
 
 const cardStyle: React.CSSProperties = {
