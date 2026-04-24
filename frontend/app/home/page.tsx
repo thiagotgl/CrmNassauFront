@@ -2,11 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import React from "react";
-import { signOut, useSession } from "next-auth/react";
+import { UserSessionFooter } from "@/components/user-session-footer";
+import { ChartNoAxesColumnIncreasing } from "lucide-react";
 
 export default function Hub() {
   const router = useRouter();
-  const { data: session } = useSession();
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function Hub() {
           justify-content: center;
           align-items: center;
           gap: 100px;
-          width: 100%;
+          width: fit-content;
           max-width: 1200px;
         }
 
@@ -41,14 +41,7 @@ export default function Hub() {
           transition: all 0.3s ease;
         }
 
-        /* todos recuam */
-        .cards-container:hover .card {
-          transform: scale(0.9);
-          opacity: 0.5;
-        }
-
-        /* foco principal */
-        .cards-container .card:hover {
+        .card:hover {
           transform: scale(1.2);
           opacity: 1;
           box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
@@ -59,20 +52,18 @@ export default function Hub() {
       <div style={containerStyle}>
         {/* LOGO */}
         <div style={logoContainer}>
-          <h1 style={brandStyle}>GLOBAL CRM</h1>
+          <button
+            type="button"
+            style={brandStyle}
+            onClick={() => router.push("/home")}
+          >
+            GLOBAL CRM
+          </button>
           <div style={logoUnderline}></div>
         </div>
 
         <div style={userPanelStyle}>
-          <span style={userTextStyle}>
-            {session?.user?.email ?? "Sessão ativa"}
-          </span>
-          <button
-            style={logoutButtonStyle}
-            onClick={() => signOut({ callbackUrl: "/" })}
-          >
-            Sair
-          </button>
+          <UserSessionFooter />
         </div>
 
         <h1 style={titleStyle}>Escolha um sistema</h1>
@@ -83,25 +74,25 @@ export default function Hub() {
             className="card"
             onClick={() => router.push("/crm")}
           >
-            <span style={iconStyle}>📊</span>
+            <ChartNoAxesColumnIncreasing style={iconStyle} strokeWidth={2.2} />
             <span>CRM</span>
           </div>
 
           <div
-            style={cardStyle}
+            style={{ ...cardStyle, display: "none" }}
             className="card"
             onClick={() => router.push("/task")}
           >
-            <span style={iconStyle}>✅</span>
+            <span style={iconStyle}>âœ…</span>
             <span>Task</span>
           </div>
 
           <div
-            style={cardStyle}
+            style={{ ...cardStyle, display: "none" }}
             className="card"
             onClick={() => router.push("/desk")}
           >
-            <span style={iconStyle}>👩🏽‍💻</span>
+            <span style={iconStyle}>ðŸ‘©ðŸ½â€ðŸ’»</span>
             <span>Desk</span>
           </div>
         </div>
@@ -130,6 +121,9 @@ const logoContainer: React.CSSProperties = {
 };
 
 const brandStyle: React.CSSProperties = {
+  border: "none",
+  padding: 0,
+  cursor: "pointer",
   fontSize: "34px",
   fontWeight: "900",
   letterSpacing: "3px",
@@ -159,23 +153,7 @@ const userPanelStyle: React.CSSProperties = {
   position: "absolute",
   top: "30px",
   right: "30px",
-  display: "flex",
-  alignItems: "center",
-  gap: "12px",
-};
-
-const userTextStyle: React.CSSProperties = {
-  color: "#e2e8f0",
-  fontSize: "14px",
-};
-
-const logoutButtonStyle: React.CSSProperties = {
-  border: "1px solid rgba(255,255,255,0.25)",
-  background: "rgba(255,255,255,0.08)",
-  color: "#fff",
-  borderRadius: "999px",
-  padding: "10px 16px",
-  cursor: "pointer",
+  width: "260px",
 };
 
 const cardStyle: React.CSSProperties = {
@@ -193,6 +171,8 @@ const cardStyle: React.CSSProperties = {
 };
 
 const iconStyle: React.CSSProperties = {
-  fontSize: "50px",
+  width: "50px",
+  height: "50px",
   marginBottom: "15px",
 };
+
