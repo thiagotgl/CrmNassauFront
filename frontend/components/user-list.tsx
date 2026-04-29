@@ -13,14 +13,18 @@ type Usuario = {
   ativo?: boolean;
 };
 
-type UsuariosResponse =
-  | Usuario[]
-  | {
-      data?: Usuario[];
-      usuario?: Usuario;
-      usuarios?: Usuario[];
-      message?: string;
-    };
+type UsuariosObjectResponse = {
+  data?: Usuario[];
+  usuario?: Usuario;
+  usuarios?: Usuario[];
+  message?: string;
+};
+
+type UsuariosResponse = Usuario[] | UsuariosObjectResponse;
+
+type UsuarioUpdateResponse = UsuariosObjectResponse & {
+  user?: Usuario;
+};
 
 type UsuarioForm = {
   nome: string;
@@ -193,7 +197,7 @@ export function UserList() {
       });
 
       const data = (await response.json().catch(() => null)) as
-        | (UsuariosResponse & { user?: Usuario })
+        | UsuarioUpdateResponse
         | null;
 
       if (!response.ok) {
