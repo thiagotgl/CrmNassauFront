@@ -5,6 +5,7 @@ import type { CSSProperties, FormEvent } from "react";
 import { ArrowLeft, Copy, Save } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { authFetch } from "@/components/auth-fetch";
 
 type Empresa = {
   id: number;
@@ -28,13 +29,6 @@ type CompanyForm = {
   telefone: string;
   email: string;
 };
-
-function getHeaders(accessToken?: string) {
-  return {
-    "Content-Type": "application/json",
-    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-  };
-}
 
 async function readApiError(response: Response, fallback: string) {
   const data = (await response.json().catch(() => null)) as
@@ -84,9 +78,9 @@ export default function EmpresaDetailPage() {
     setLoading(true);
     setError(null);
 
-    const response = await fetch(`${apiUrl}/empresas/${empresaId}`, {
+    const response = await authFetch(`${apiUrl}/empresas/${empresaId}`, {
       method: "GET",
-      headers: getHeaders(session.accessToken),
+      accessToken: session.accessToken,
     });
 
     if (!response.ok) {
@@ -141,9 +135,9 @@ export default function EmpresaDetailPage() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/empresas/${empresaId}`, {
+      const response = await authFetch(`${apiUrl}/empresas/${empresaId}`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({
           nome: form.nome.trim(),
           cnpj: form.cnpj,
@@ -184,9 +178,9 @@ export default function EmpresaDetailPage() {
       }
 
       const nextActive = !(empresa.ativo ?? true);
-      const response = await fetch(`${apiUrl}/empresas/${empresaId}`, {
+      const response = await authFetch(`${apiUrl}/empresas/${empresaId}`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({ ativo: nextActive }),
       });
 

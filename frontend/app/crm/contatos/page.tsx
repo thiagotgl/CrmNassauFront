@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { authFetch } from "@/components/auth-fetch";
 
 type ActiveTab = "contatos" | "empresas";
 type StatusFilter = "ativos" | "inativos" | "todos";
@@ -83,13 +84,6 @@ const initialCompanyForm: CompanyForm = {
   email: "",
 };
 
-function getHeaders(accessToken?: string) {
-  return {
-    "Content-Type": "application/json",
-    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-  };
-}
-
 async function readApiError(response: Response, fallback: string) {
   const data = (await response.json().catch(() => null)) as
     | ApiErrorResponse
@@ -149,9 +143,9 @@ export default function ContatosPage() {
       throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
     }
 
-    const response = await fetch(`${apiUrl}/contatos`, {
+    const response = await authFetch(`${apiUrl}/contatos`, {
       method: "GET",
-      headers: getHeaders(session?.accessToken),
+      accessToken: session?.accessToken,
     });
 
     if (!response.ok) {
@@ -169,9 +163,9 @@ export default function ContatosPage() {
       throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
     }
 
-    const response = await fetch(`${apiUrl}/empresas`, {
+    const response = await authFetch(`${apiUrl}/empresas`, {
       method: "GET",
-      headers: getHeaders(session?.accessToken),
+      accessToken: session?.accessToken,
     });
 
     if (!response.ok) {
@@ -336,9 +330,9 @@ export default function ContatosPage() {
     const failures: string[] = [];
 
     for (const id of selectedIds) {
-      const response = await fetch(`${apiUrl}/${basePath}/${id}`, {
+      const response = await authFetch(`${apiUrl}/${basePath}/${id}`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({ ativo: action === "activate" }),
       });
 
@@ -406,9 +400,9 @@ export default function ContatosPage() {
           throw new Error("Informe o nome da nova empresa.");
         }
 
-        const companyResponse = await fetch(`${apiUrl}/empresas`, {
+        const companyResponse = await authFetch(`${apiUrl}/empresas`, {
           method: "POST",
-          headers: getHeaders(session?.accessToken),
+          accessToken: session?.accessToken,
           body: JSON.stringify({
             nome: companyName,
             cnpj: inlineCompanyForm.cnpj,
@@ -427,9 +421,9 @@ export default function ContatosPage() {
         empresaId = companyData.id;
       }
 
-      const response = await fetch(`${apiUrl}/contatos`, {
+      const response = await authFetch(`${apiUrl}/contatos`, {
         method: "POST",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({
           nome,
           cpf: contactForm.cpf,
@@ -480,9 +474,9 @@ export default function ContatosPage() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/empresas`, {
+      const response = await authFetch(`${apiUrl}/empresas`, {
         method: "POST",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({
           nome,
           cnpj: companyForm.cnpj,
@@ -504,9 +498,9 @@ export default function ContatosPage() {
           throw new Error("Informe o nome do contato vinculado.");
         }
 
-        const contactResponse = await fetch(`${apiUrl}/contatos`, {
+        const contactResponse = await authFetch(`${apiUrl}/contatos`, {
           method: "POST",
-          headers: getHeaders(session?.accessToken),
+          accessToken: session?.accessToken,
           body: JSON.stringify({
             nome: contactName,
             cpf: inlineContactForm.cpf,

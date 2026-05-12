@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, Pencil } from "lucide-react";
+import { authFetch } from "@/components/auth-fetch";
 
 type Usuario = {
   id?: string | number;
@@ -49,13 +50,6 @@ function getUsuarioNome(usuario: Usuario) {
   return usuario.nome ?? usuario.name ?? "";
 }
 
-function getHeaders(accessToken?: string) {
-  return {
-    "Content-Type": "application/json",
-    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-  };
-}
-
 export function UserList() {
   const { data: session } = useSession();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -85,9 +79,9 @@ export function UserList() {
           throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
         }
 
-        const response = await fetch(`${apiUrl}/usuarios`, {
+        const response = await authFetch(`${apiUrl}/usuarios`, {
           method: "GET",
-          headers: getHeaders(session?.accessToken),
+          accessToken: session?.accessToken,
         });
 
         const data = (await response.json().catch(() => null)) as
@@ -187,9 +181,9 @@ export function UserList() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/usuarios/${id}`, {
+      const response = await authFetch(`${apiUrl}/usuarios/${id}`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({
           nome,
           email,
@@ -251,9 +245,9 @@ export function UserList() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/usuarios/${id}/ativo`, {
+      const response = await authFetch(`${apiUrl}/usuarios/${id}/ativo`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({ ativo: nextAtivo }),
       });
 
@@ -319,9 +313,9 @@ export function UserList() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/usuarios/${id}/senha`, {
+      const response = await authFetch(`${apiUrl}/usuarios/${id}/senha`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({ senha }),
       });
 

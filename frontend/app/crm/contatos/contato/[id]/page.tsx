@@ -5,6 +5,7 @@ import type { CSSProperties, FormEvent } from "react";
 import { ArrowLeft, Copy, Save } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { authFetch } from "@/components/auth-fetch";
 
 type Empresa = {
   id: number;
@@ -34,13 +35,6 @@ type ContactForm = {
   email: string;
   empresaId: string;
 };
-
-function getHeaders(accessToken?: string) {
-  return {
-    "Content-Type": "application/json",
-    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-  };
-}
 
 async function readApiError(response: Response, fallback: string) {
   const data = (await response.json().catch(() => null)) as
@@ -93,13 +87,13 @@ export default function ContatoDetailPage() {
     setError(null);
 
     const [contatoResponse, empresasResponse] = await Promise.all([
-      fetch(`${apiUrl}/contatos/${contatoId}`, {
+      authFetch(`${apiUrl}/contatos/${contatoId}`, {
         method: "GET",
-        headers: getHeaders(session.accessToken),
+        accessToken: session.accessToken,
       }),
-      fetch(`${apiUrl}/empresas`, {
+      authFetch(`${apiUrl}/empresas`, {
         method: "GET",
-        headers: getHeaders(session.accessToken),
+        accessToken: session.accessToken,
       }),
     ]);
 
@@ -166,9 +160,9 @@ export default function ContatoDetailPage() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/contatos/${contatoId}`, {
+      const response = await authFetch(`${apiUrl}/contatos/${contatoId}`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({
           nome: form.nome.trim(),
           cpf: form.cpf,
@@ -210,9 +204,9 @@ export default function ContatoDetailPage() {
       }
 
       const nextActive = !(contato.ativo ?? true);
-      const response = await fetch(`${apiUrl}/contatos/${contatoId}`, {
+      const response = await authFetch(`${apiUrl}/contatos/${contatoId}`, {
         method: "PUT",
-        headers: getHeaders(session?.accessToken),
+        accessToken: session?.accessToken,
         body: JSON.stringify({ ativo: nextActive }),
       });
 

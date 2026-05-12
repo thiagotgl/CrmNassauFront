@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { useSession } from "next-auth/react";
+import { authFetch } from "@/components/auth-fetch";
 
 type UsuarioTipo = "admin" | "vendedor" | "cliente" | "supervisor";
 
@@ -87,14 +88,9 @@ export function UserRegistrationForm() {
         throw new Error("NEXT_PUBLIC_API_URL nao configurada.");
       }
 
-      const response = await fetch(`${apiUrl}/usuarios`, {
+      const response = await authFetch(`${apiUrl}/usuarios`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(session?.accessToken
-            ? { Authorization: `Bearer ${session.accessToken}` }
-            : {}),
-        },
+        accessToken: session?.accessToken,
         body: JSON.stringify({
           nome: form.nome.trim(),
           cpf: form.cpf.replace(/\D/g, ""),
