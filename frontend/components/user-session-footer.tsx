@@ -5,16 +5,28 @@ import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { SettingsButton, iconButtonStyle } from "@/components/settings-button";
 
-export function UserSessionFooter() {
+export function UserSessionFooter({ compact = false }: { compact?: boolean }) {
   const { data: session } = useSession();
 
   return (
-    <div style={containerStyle}>
-      <div style={emailStyle}>
-        {session?.user?.email ?? "Sessao autenticada"}
-      </div>
+    <div
+      style={{
+        ...containerStyle,
+        justifyContent: compact ? "center" : "space-between",
+      }}
+    >
+      {!compact ? (
+        <div style={emailStyle}>
+          {session?.user?.email ?? "Sessao autenticada"}
+        </div>
+      ) : null}
 
-      <div style={actionsStyle}>
+      <div
+        style={{
+          ...actionsStyle,
+          flexDirection: compact ? "column" : "row",
+        }}
+      >
         <SettingsButton />
 
         <button
