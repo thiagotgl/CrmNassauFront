@@ -1389,7 +1389,7 @@ function TimelineItem({ item }: { item: HistoricoContato }) {
                 color: theme.color,
               }}
             >
-              {historyTypeLabels[item.tipo]}
+              {item.titulo || historyTypeLabels[item.tipo]}
             </span>
           </div>
           <span style={{ fontSize: "12px", color: "#64748b" }}>
