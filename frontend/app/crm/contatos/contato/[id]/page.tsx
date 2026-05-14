@@ -539,12 +539,12 @@ export default function ContatoDetailPage() {
       <style>{`
         .contact-page-scroll {
           scrollbar-width: thin;
-          scrollbar-color: rgba(37, 99, 235, 0.55) rgba(255, 255, 255, 0.08);
+          scrollbar-color: var(--crm-brand-sky) transparent;
         }
 
         .contact-page-scroll::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
+          width: 0.4rem;
+          height: 0.4rem;
         }
 
         .contact-page-scroll::-webkit-scrollbar-track {
@@ -561,23 +561,19 @@ export default function ContatoDetailPage() {
         }
 
         .contact-panel {
-          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
-          transition: border-color 0.18s ease, box-shadow 0.18s ease;
+          box-shadow: none;
         }
 
         .contact-panel:hover {
-          border-color: #bfdbfe;
-          box-shadow: 0 20px 55px rgba(15, 23, 42, 0.16);
+          border-color: var(--crm-brand-border);
         }
 
         .floating-surface {
-          box-shadow: 0 22px 70px rgba(15, 23, 42, 0.16);
-          transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+          transition: border-color 0.18s ease;
         }
 
         .floating-surface:hover {
-          border-color: rgba(191, 219, 254, 0.9);
-          box-shadow: 0 26px 82px rgba(15, 23, 42, 0.2);
+          border-color: var(--crm-brand-border);
         }
 
         .timeline-list {
@@ -587,12 +583,12 @@ export default function ContatoDetailPage() {
         .timeline-list::before {
           content: "";
           position: absolute;
-          top: 10px;
-          bottom: 10px;
-          left: 19px;
+          top: var(--crm-space-2);
+          bottom: var(--crm-space-2);
+          left: 1.1rem;
           width: 2px;
-          background: #ffffff;
-          opacity: 0.3;
+          background: #cbd5e1;
+          opacity: 1;
           border-radius: 999px;
         }
 
@@ -601,9 +597,9 @@ export default function ContatoDetailPage() {
         }
 
         .quick-action:hover {
-          background: #eff6ff;
-          border-color: #93c5fd;
-          transform: translateY(-1px);
+          background: var(--crm-brand-soft);
+          border-color: var(--crm-brand-border);
+          color: var(--crm-brand-primary);
         }
 
         @media (max-width: 980px) {
@@ -627,16 +623,16 @@ export default function ContatoDetailPage() {
             </button>
             <div
               style={{
-                width: "52px",
-                height: "52px",
-                borderRadius: "14px",
+                width: "2.75rem",
+                height: "2.75rem",
+                borderRadius: "var(--crm-radius-lg)",
                 background:
-                  "linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)",
+                  "linear-gradient(135deg, var(--crm-brand-primary) 0%, var(--crm-brand-sky) 100%)",
                 color: "#fff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "18px",
+                fontSize: "1rem",
                 fontWeight: 800,
                 boxShadow: "0 4px 12px rgba(37, 99, 235, 0.25)",
               }}
@@ -647,9 +643,8 @@ export default function ContatoDetailPage() {
               <h1
                 style={{
                   ...titleStyle,
-                  fontSize: "26px",
-                  color: "#f8fafc",
-                  letterSpacing: "-0.02em",
+                  fontSize: "1.45rem",
+                  color: "#fff",
                 }}
               >
                 {contato?.nome ?? `Contato ${contatoId}`}
@@ -659,7 +654,7 @@ export default function ContatoDetailPage() {
                 <span
                   style={{
                     ...headerCompanyStyle,
-                    color: "#93c5fd",
+                    color: "rgba(255,255,255,0.78)",
                     fontWeight: 600,
                   }}
                 >
@@ -670,14 +665,14 @@ export default function ContatoDetailPage() {
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "6px",
-                    background: "rgba(255, 255, 255, 0.1)",
-                    color: "#cbd5e1",
-                    padding: "4px 10px",
+                    gap: "var(--crm-space-1)",
+                    background: "rgba(249,115,22,0.18)",
+                    color: "#fff7ed",
+                    padding: "0.2rem var(--crm-space-2)",
                     borderRadius: "999px",
-                    fontSize: "12px",
+                    fontSize: "0.78rem",
                     fontWeight: 600,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(253,186,116,0.38)",
                   }}
                 >
                   <Clock3 size={13} strokeWidth={2.2} />
@@ -761,13 +756,12 @@ export default function ContatoDetailPage() {
               <div
                 style={{
                   position: "absolute",
-                  bottom: "-4px",
+                  bottom: "-1px",
                   left: 0,
                   right: 0,
                   height: "2px",
-                  background: "#60a5fa",
+                  background: "var(--crm-brand-orange)",
                   borderRadius: "2px",
-                  boxShadow: "0 0 8px rgba(96, 165, 250, 0.5)",
                 }}
               />
             )}
@@ -777,7 +771,7 @@ export default function ContatoDetailPage() {
 
       <div
         className="contact-page-scroll"
-        style={{ ...contentGridStyle, marginTop: "16px" }}
+        style={{ ...contentGridStyle, marginTop: "var(--crm-space-3)" }}
       >
         {activeTab === "geral" ? (
           <div className="contact-general-grid" style={generalGridStyle}>
@@ -786,20 +780,20 @@ export default function ContatoDetailPage() {
                 <form
                   className="floating-surface"
                   onSubmit={handleSave}
-                  style={floatingSurfaceStyle}
+                  style={editContactFormStyle}
                 >
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      marginBottom: "4px",
+                      marginBottom: "var(--crm-space-1)",
                     }}
                   >
                     <h3
                       style={{
                         margin: 0,
-                        fontSize: "14px",
+                        fontSize: "0.93rem",
                         fontWeight: 700,
                         color: "#64748b",
                       }}
@@ -814,7 +808,7 @@ export default function ContatoDetailPage() {
                         border: "none",
                         color: "#94a3b8",
                         cursor: "pointer",
-                        padding: "4px",
+                        padding: "var(--crm-space-1)",
                         display: "flex",
                       }}
                     >
@@ -822,7 +816,8 @@ export default function ContatoDetailPage() {
                     </button>
                   </div>
 
-                  <div style={formGridStyle}>
+                  <div className="contact-page-scroll" style={editFormBodyStyle}>
+                    <div style={formGridStyle}>
                     <Field label="Nome" icon={User} required>
                       <input
                         value={form.nome}
@@ -886,14 +881,10 @@ export default function ContatoDetailPage() {
                         ))}
                       </select>
                     </Field>
+                    </div>
                   </div>
                   <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      marginTop: "4px",
-                      justifyContent: "flex-end",
-                    }}
+                    style={editFormActionsStyle}
                   >
                     <button
                       type="button"
@@ -922,18 +913,18 @@ export default function ContatoDetailPage() {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      marginBottom: "4px",
+                      marginBottom: "var(--crm-space-1)",
                     }}
                   >
                     <h3
                       style={{
                         margin: 0,
-                        fontSize: "14px",
+                        fontSize: "0.93rem",
                         fontWeight: 700,
                         color: "#64748b",
                         display: "flex",
                         alignItems: "center",
-                        gap: "6px",
+                        gap: "var(--crm-space-1)",
                       }}
                     >
                       <User size={16} />
@@ -945,9 +936,9 @@ export default function ContatoDetailPage() {
                       style={{
                         background: "rgba(37, 99, 235, 0.05)",
                         border: "1px solid rgba(37, 99, 235, 0.1)",
-                        color: "#2563eb",
-                        borderRadius: "8px",
-                        padding: "6px",
+                        color: "var(--crm-brand-primary)",
+                        borderRadius: "var(--crm-radius-md)",
+                        padding: "var(--crm-space-1)",
                         cursor: "pointer",
                         display: "flex",
                         transition: "all 0.2s ease",
@@ -962,8 +953,8 @@ export default function ContatoDetailPage() {
                     style={{
                       display: "flex",
                       flexDirection: "column",
-                      gap: "24px", // Aumentado para melhor distribuição
-                      marginTop: "12px",
+                      gap: "var(--crm-space-4)",
+                      marginTop: "var(--crm-space-2)",
                       flex: 1,
                     }}
                   >
@@ -1008,14 +999,14 @@ export default function ContatoDetailPage() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "10px",
+                    gap: "var(--crm-space-2)",
                   }}
                 >
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "8px",
+                      gap: "var(--crm-space-2)",
                       flexWrap: "wrap",
                     }}
                   >
@@ -1038,17 +1029,18 @@ export default function ContatoDetailPage() {
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: "6px",
-                          padding: "6px 12px",
-                          borderRadius: "8px",
-                          fontSize: "12px",
+                          gap: "var(--crm-space-1)",
+                          minHeight: "var(--crm-control-height-sm)",
+                          padding: "0 var(--crm-space-2)",
+                          borderRadius: "var(--crm-radius-md)",
+                          fontSize: "0.78rem",
                           fontWeight: 700,
                           cursor: "pointer",
                           transition: "all 0.2s ease",
                           border: "1px solid",
                           background:
                             !isCustomType && historyForm.tipo === btn.type
-                              ? "#2563eb"
+                              ? "var(--crm-brand-orange)"
                               : "#fff",
                           color:
                             !isCustomType && historyForm.tipo === btn.type
@@ -1056,7 +1048,7 @@ export default function ContatoDetailPage() {
                               : "#64748b",
                           borderColor:
                             !isCustomType && historyForm.tipo === btn.type
-                              ? "#2563eb"
+                              ? "var(--crm-brand-orange)"
                               : "#e2e8f0",
                         }}
                       >
@@ -1071,17 +1063,18 @@ export default function ContatoDetailPage() {
                       style={{
                         display: "inline-flex",
                         alignItems: "center",
-                        gap: "6px",
-                        padding: "6px 12px",
-                        borderRadius: "8px",
-                        fontSize: "12px",
+                        gap: "var(--crm-space-1)",
+                        minHeight: "var(--crm-control-height-sm)",
+                        padding: "0 var(--crm-space-2)",
+                        borderRadius: "var(--crm-radius-md)",
+                        fontSize: "0.78rem",
                         fontWeight: 700,
                         cursor: "pointer",
                         transition: "all 0.2s ease",
                         border: "1px solid",
-                        background: isCustomType ? "#111827" : "#fff",
+                        background: isCustomType ? "var(--crm-brand-orange)" : "#fff",
                         color: isCustomType ? "#fff" : "#64748b",
-                        borderColor: isCustomType ? "#111827" : "#e2e8f0",
+                        borderColor: isCustomType ? "var(--crm-brand-orange)" : "#e2e8f0",
                         marginLeft: "auto",
                       }}
                     >
@@ -1097,8 +1090,8 @@ export default function ContatoDetailPage() {
                       placeholder="Qual o tipo desta ação? (ex: Visita, Reunião...)"
                       style={{
                         ...inputStyle,
-                        height: "36px",
-                        padding: "0 12px",
+                        height: "var(--crm-control-height-md)",
+                        padding: "0 var(--crm-space-3)",
                       }}
                       autoFocus
                     />
@@ -1107,7 +1100,7 @@ export default function ContatoDetailPage() {
                   <div
                     style={{
                       display: "flex",
-                      gap: "12px",
+                      gap: "var(--crm-space-3)",
                       alignItems: "flex-start",
                     }}
                   >
@@ -1116,7 +1109,7 @@ export default function ContatoDetailPage() {
                         flex: 1,
                         display: "flex",
                         flexDirection: "column",
-                        gap: "8px",
+                        gap: "var(--crm-space-2)",
                       }}
                     >
                       <textarea
@@ -1130,9 +1123,9 @@ export default function ContatoDetailPage() {
                         placeholder="Descreva o que aconteceu..."
                         style={{
                           ...textareaStyle,
-                          minHeight: "64px",
-                          height: "64px",
-                          padding: "10px 12px",
+                          minHeight: "4rem",
+                          height: "4rem",
+                          padding: "var(--crm-space-2) var(--crm-space-3)",
                           background: "#fff",
                         }}
                         disabled={submittingHistory}
@@ -1143,8 +1136,8 @@ export default function ContatoDetailPage() {
                       type="submit"
                       style={{
                         ...primaryButtonStyle,
-                        height: "64px",
-                        width: "52px",
+                        height: "4rem",
+                        width: "3.25rem",
                         padding: 0,
                       }}
                       disabled={submittingHistory}
@@ -1154,7 +1147,7 @@ export default function ContatoDetailPage() {
                   </div>
                 </div>
                 {timelineError ? (
-                  <span style={{ ...inlineErrorStyle, marginTop: "4px" }}>
+                  <span style={{ ...inlineErrorStyle, marginTop: "var(--crm-space-1)" }}>
                     {timelineError}
                   </span>
                 ) : null}
@@ -1230,7 +1223,7 @@ function Field({
   return (
     <label style={fieldStyle}>
       <span style={labelStyle}>
-        {Icon && <Icon size={14} style={{ marginRight: "6px" }} />}
+        {Icon && <Icon size={14} style={{ marginRight: "var(--crm-space-1)" }} />}
         {label}
         {required ? " *" : ""}
       </span>
@@ -1255,8 +1248,8 @@ function ReadOnlyField({
   const content = (
     <span
       style={{
-        fontSize: "15px", // Ligeiramente maior
-        fontWeight: 700, // Mais destaque
+        fontSize: "0.93rem",
+        fontWeight: 700,
         color: value ? "#0f172a" : "#94a3b8",
         wordBreak: "break-all",
       }}
@@ -1270,23 +1263,23 @@ function ReadOnlyField({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: "6px", // Mais espaço entre label e valor
-        paddingBottom: "4px",
+        gap: "var(--crm-space-1)",
+        paddingBottom: "var(--crm-space-1)",
       }}
     >
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "8px",
-          color: "#64748b", // Cor um pouco mais visível
-          marginBottom: "2px",
+          gap: "var(--crm-space-2)",
+          color: "#64748b",
+          marginBottom: "0.15rem",
         }}
       >
         {Icon && <Icon size={14} />}
         <span
           style={{
-            fontSize: "10px",
+            fontSize: "0.68rem",
             fontWeight: 800,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
@@ -1297,9 +1290,9 @@ function ReadOnlyField({
       </div>
       <div
         style={{
-          padding: "8px 12px",
-          background: "#f8fafc", // Fundo sutil para o valor
-          borderRadius: "8px",
+          padding: "var(--crm-space-2) var(--crm-space-3)",
+          background: "#f8fafc",
+          borderRadius: "var(--crm-radius-md)",
           border: "1px solid #f1f5f9",
           display: "flex",
           alignItems: "center",
@@ -1377,14 +1370,14 @@ function TimelineItem({ item }: { item: HistoricoContato }) {
       </span>
       <div style={timelineContentStyle}>
         <div style={timelineItemHeaderStyle}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--crm-space-2)" }}>
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "0.72rem",
                 fontWeight: 800,
                 textTransform: "uppercase",
-                padding: "2px 6px",
-                borderRadius: "4px",
+                padding: "0.15rem var(--crm-space-1)",
+                borderRadius: "var(--crm-radius-sm)",
                 background: theme.bg,
                 color: theme.color,
               }}
@@ -1392,15 +1385,15 @@ function TimelineItem({ item }: { item: HistoricoContato }) {
               {item.titulo || historyTypeLabels[item.tipo]}
             </span>
           </div>
-          <span style={{ fontSize: "12px", color: "#64748b" }}>
+          <span style={{ fontSize: "0.78rem", color: "#64748b" }}>
             {formatDateTime(item.criadoEm)}
           </span>
         </div>
         <p style={timelineDescriptionStyle}>{item.descricao}</p>
         <div
           style={{
-            marginTop: "10px",
-            paddingTop: "8px",
+            marginTop: "var(--crm-space-2)",
+            paddingTop: "var(--crm-space-2)",
             borderTop: "1px solid #f1f5f9",
             display: "flex",
             justifyContent: "space-between",
@@ -1420,7 +1413,7 @@ const pageStyle: CSSProperties = {
   height: "100%",
   display: "flex",
   flexDirection: "column",
-  gap: "12px",
+  gap: "var(--crm-space-3)",
   minWidth: 0,
   minHeight: 0,
   overflow: "hidden",
@@ -1430,47 +1423,52 @@ const headerStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: "14px",
+  gap: "var(--crm-space-3)",
   flexWrap: "wrap",
+  border: "1px solid transparent",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "transparent",
+  padding: "var(--crm-space-2) 0",
+  boxShadow: "none",
 };
 
 const headerTitleStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: "12px",
+  gap: "var(--crm-space-3)",
   minWidth: 0,
 };
 
 const headerMetaStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: "8px",
+  gap: "var(--crm-space-2)",
   flexWrap: "wrap",
-  marginTop: "6px",
+  marginTop: "var(--crm-space-1)",
 };
 
 const headerCompanyStyle: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
-  gap: "6px",
-  color: "#dbeafe",
-  fontSize: "13px",
+  gap: "var(--crm-space-1)",
+  color: "rgba(255,255,255,0.78)",
+  fontSize: "0.86rem",
   fontWeight: 700,
 };
 
 const headerActionsStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: "8px",
+  gap: "var(--crm-space-2)",
   flexWrap: "wrap",
 };
 
 const headerQuickActionStyle: CSSProperties = {
-  width: "42px",
-  height: "42px",
-  border: "1px solid rgba(255,255,255,0.15)",
-  borderRadius: "12px",
-  background: "rgba(255,255,255,0.1)",
+  width: "var(--crm-control-height-md)",
+  height: "var(--crm-control-height-md)",
+  border: "1px solid rgba(255,255,255,0.3)",
+  borderRadius: "var(--crm-radius-md)",
+  background: "rgba(255,255,255,0.16)",
   color: "#fff",
   display: "inline-flex",
   alignItems: "center",
@@ -1481,7 +1479,7 @@ const headerQuickActionStyle: CSSProperties = {
 
 const titleStyle: CSSProperties = {
   margin: 0,
-  fontSize: "22px",
+  fontSize: "1.35rem",
   fontWeight: 800,
   overflowWrap: "anywhere",
 };
@@ -1491,14 +1489,14 @@ const contentGridStyle: CSSProperties = {
   flex: 1,
   minHeight: 0,
   overflow: "hidden",
-  padding: "2px 8px 2px 2px",
+  padding: "0 var(--crm-space-1) var(--crm-space-1) 0",
 };
 
 const generalGridStyle: CSSProperties = {
   display: "grid",
-  gridTemplateColumns: "minmax(340px, 440px) minmax(0, 1fr)",
+  gridTemplateColumns: "minmax(20rem, 28rem) minmax(0, 1fr)",
   alignItems: "stretch", // Volta para stretch para igualar alturas
-  gap: "14px",
+  gap: "var(--crm-space-3)",
   height: "100%",
   minHeight: 0,
 };
@@ -1506,7 +1504,7 @@ const generalGridStyle: CSSProperties = {
 const leftColumnStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "14px",
+  gap: "var(--crm-space-3)",
   minWidth: 0,
   minHeight: 0,
 };
@@ -1514,25 +1512,48 @@ const leftColumnStyle: CSSProperties = {
 const timelineColumnStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "14px",
+  gap: "var(--crm-space-3)",
   minWidth: 0,
   minHeight: 0,
   height: "100%",
 };
 
 const floatingSurfaceStyle: CSSProperties = {
-  border: "1px solid rgba(255,255,255,0.4)",
-  borderRadius: "16px",
-  background: "rgba(255,255,255,0.85)",
-  backdropFilter: "blur(20px)",
-  boxShadow:
-    "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+  border: "1px solid rgba(255,255,255,0.28)",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "rgba(255,255,255,0.78)",
+  backdropFilter: "blur(14px)",
+  boxShadow: "0 0.875rem 2rem rgba(15, 23, 42, 0.12)",
   color: "#1e293b",
-  padding: "24px",
+  padding: "var(--crm-surface-padding)",
   display: "flex",
   flexDirection: "column",
-  gap: "20px",
+  gap: "var(--crm-space-4)",
   minHeight: 0,
+};
+
+const editContactFormStyle: CSSProperties = {
+  ...floatingSurfaceStyle,
+  height: "100%",
+  overflow: "hidden",
+};
+
+const editFormBodyStyle: CSSProperties = {
+  flex: 1,
+  minHeight: 0,
+  overflowY: "auto",
+  overflowX: "hidden",
+  paddingRight: "var(--crm-space-1)",
+};
+
+const editFormActionsStyle: CSSProperties = {
+  display: "flex",
+  gap: "var(--crm-space-2)",
+  justifyContent: "flex-end",
+  flexWrap: "wrap",
+  flexShrink: 0,
+  paddingTop: "var(--crm-space-2)",
+  borderTop: "1px solid rgba(255,255,255,0.24)",
 };
 
 const timelineSurfaceStyle: CSSProperties = {
@@ -1545,44 +1566,45 @@ const timelineSurfaceStyle: CSSProperties = {
   flexDirection: "column",
   flex: 1,
   minHeight: 0,
-  height: "calc(100vh - 250px)",
+  height: "calc(100dvh - 13.75rem)",
 };
 
 const tabsStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: "24px", // Mais espaço entre os itens para um visual de navegação
-  padding: "4px 8px",
-  borderBottom: "1px solid rgba(255,255,255,0.1)", // Linha de base sutil
+  gap: "var(--crm-space-5)",
+  padding: "0 var(--crm-space-1)",
+  borderBottom: "1px solid rgba(255,255,255,0.24)",
   width: "100%",
 };
 
 const tabStyle: CSSProperties = {
   border: "none",
   background: "transparent",
-  color: "#94a3b8",
-  padding: "8px 4px",
+  color: "rgba(255,255,255,0.72)",
+  padding: "var(--crm-space-2) var(--crm-space-1)",
   cursor: "pointer",
   fontWeight: 600,
-  fontSize: "14px",
+  fontSize: "0.93rem",
   position: "relative",
   transition: "all 0.2s ease",
 };
 
 const activeTabStyle: CSSProperties = {
   ...tabStyle,
-  color: "#fff",
+  color: "#ffffff",
 };
 
 const panelStyle: CSSProperties = {
-  borderRadius: "8px",
-  background: "#fff",
+  borderRadius: "var(--crm-radius-md)",
+  background: "rgba(255,255,255,0.78)",
   color: "#111827",
-  padding: "16px",
+  padding: "var(--crm-surface-padding)",
   display: "flex",
   flexDirection: "column",
-  gap: "16px",
-  border: "1px solid #e5e7eb",
+  gap: "var(--crm-space-4)",
+  border: "1px solid rgba(255,255,255,0.28)",
+  backdropFilter: "blur(14px)",
   minHeight: 0,
 };
 
@@ -1590,81 +1612,83 @@ const panelHeaderStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: "12px",
-  minHeight: "34px",
+  gap: "var(--crm-space-3)",
+  minHeight: "var(--crm-control-height-md)",
 };
 
 const formGridStyle: CSSProperties = {
   display: "grid",
   gridTemplateColumns: "1fr",
-  gap: "14px",
+  gap: "var(--crm-space-3)",
 };
 
 const fieldStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "6px",
+  gap: "var(--crm-space-1)",
 };
 
 const labelStyle: CSSProperties = {
   color: "#4b5563",
-  fontSize: "12px",
+  fontSize: "0.78rem",
   fontWeight: 700,
 };
 
 const inputStyle: CSSProperties = {
   width: "100%",
   minWidth: 0,
-  border: "1px solid #e2e8f0",
-  borderRadius: "10px",
-  background: "#f8fafc",
+  border: "1px solid rgba(226,232,240,0.78)",
+  borderRadius: "var(--crm-radius-md)",
+  background: "rgba(248,250,252,0.72)",
   color: "#0f172a",
   outline: "none",
-  padding: "12px 14px",
+  minHeight: "var(--crm-control-height-md)",
+  padding: "0 var(--crm-space-3)",
   boxSizing: "border-box",
   transition: "all 0.2s ease-in-out",
-  fontSize: "14px",
+  fontSize: "0.93rem",
 };
 
 const textareaStyle: CSSProperties = {
   ...inputStyle,
-  minHeight: "80px",
+  minHeight: "4.75rem",
   resize: "vertical",
   lineHeight: 1.5,
-  fontSize: "14px",
+  fontSize: "0.93rem",
   background: "#fff",
   border: "1px solid #e2e8f0",
 };
 
 const primaryButtonStyle: CSSProperties = {
   border: "none",
-  borderRadius: "10px",
-  background: "#2563eb",
+  borderRadius: "var(--crm-radius-md)",
+  background: "var(--crm-brand-orange)",
   color: "#fff",
-  padding: "10px 16px",
+  minHeight: "var(--crm-control-height-md)",
+  padding: "0 var(--crm-space-3)",
   cursor: "pointer",
   fontWeight: 700,
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  gap: "8px",
+  gap: "var(--crm-space-2)",
   transition: "all 0.2s ease-in-out",
-  fontSize: "14px",
+  fontSize: "0.93rem",
 };
 
 const secondaryButtonStyle: CSSProperties = {
   ...primaryButtonStyle,
   border: "1px solid #e2e8f0",
   background: "#fff",
-  color: "#475569",
+  color: "var(--crm-brand-primary)",
 };
 
 const secondaryIconButtonStyle: CSSProperties = {
-  width: "38px",
-  height: "38px",
+  width: "var(--crm-control-height-md)",
+  height: "var(--crm-control-height-md)",
   borderRadius: "999px",
-  border: "1px solid rgba(255,255,255,0.18)",
-  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(255,255,255,0.3)",
+  background: "rgba(255,255,255,0.14)",
   color: "#fff",
   cursor: "pointer",
   display: "inline-flex",
@@ -1682,69 +1706,70 @@ const statusBadgeStyle: CSSProperties = {
   display: "inline-flex",
   width: "fit-content",
   borderRadius: "999px",
-  padding: "4px 9px",
-  fontSize: "12px",
+  padding: "0.2rem var(--crm-space-2)",
+  fontSize: "0.78rem",
   fontWeight: 800,
 };
 
 const countBadgeStyle: CSSProperties = {
   borderRadius: "999px",
-  background: "#eef2ff",
-  color: "#3730a3",
-  padding: "4px 9px",
-  fontSize: "12px",
+  background: "var(--crm-brand-orange-soft)",
+  color: "#9a3412",
+  padding: "0.2rem var(--crm-space-2)",
+  fontSize: "0.78rem",
   fontWeight: 800,
 };
 
 const errorBoxStyle: CSSProperties = {
-  borderRadius: "8px",
+  borderRadius: "var(--crm-radius-md)",
   background: "#fee2e2",
   color: "#991b1b",
-  padding: "10px 12px",
-  fontSize: "13px",
+  padding: "var(--crm-space-2) var(--crm-space-3)",
+  fontSize: "0.86rem",
   fontWeight: 700,
 };
 
 const inlineErrorStyle: CSSProperties = {
   color: "#b91c1c",
-  fontSize: "13px",
+  fontSize: "0.86rem",
   fontWeight: 700,
   marginRight: "auto",
 };
 
 const stateTextStyle: CSSProperties = {
   margin: 0,
-  color: "#fff",
-  fontSize: "14px",
+  color: "var(--crm-text-strong)",
+  fontSize: "0.93rem",
 };
 
 const mutedTextStyle: CSSProperties = {
   margin: 0,
   color: "#64748b",
-  fontSize: "14px",
+  fontSize: "0.93rem",
 };
 
 const emptyStateStyle: CSSProperties = {
-  minHeight: "92px",
-  borderRadius: "8px",
+  minHeight: "5.5rem",
+  borderRadius: "var(--crm-radius-md)",
   border: "1px dashed #cbd5e1",
   color: "#64748b",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   textAlign: "center",
-  padding: "18px",
+  padding: "var(--crm-space-4)",
   lineHeight: 1.45,
 };
 
 const timelineComposerStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
-  border: "1px dashed #cbd5e1",
-  borderRadius: "14px",
-  background: "rgba(248, 250, 252, 0.5)",
-  padding: "16px",
+  gap: "var(--crm-space-2)",
+  border: "1px solid rgba(255,255,255,0.28)",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "rgba(255,255,255,0.78)",
+  backdropFilter: "blur(14px)",
+  padding: "var(--crm-surface-padding)",
   marginTop: "0",
   transition: "all 0.2s ease",
 };
@@ -1752,8 +1777,8 @@ const timelineComposerStyle: CSSProperties = {
 const timelineListStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "16px",
-  padding: "0 0 72px",
+  gap: "var(--crm-space-3)",
+  padding: "0 0 4.5rem",
 };
 
 const timelineScrollAreaStyle: CSSProperties = {
@@ -1761,21 +1786,21 @@ const timelineScrollAreaStyle: CSSProperties = {
   minHeight: 0,
   overflowY: "auto",
   overflowX: "hidden",
-  padding: "0 12px 0 0",
-  scrollPaddingBottom: "72px",
-  marginTop: "16px",
+  padding: "0 var(--crm-space-2) 0 0",
+  scrollPaddingBottom: "4.5rem",
+  marginTop: "var(--crm-space-3)",
 };
 
 const timelineItemStyle: CSSProperties = {
   display: "grid",
-  gridTemplateColumns: "38px minmax(0, 1fr)",
-  gap: "16px",
+  gridTemplateColumns: "2.25rem minmax(0, 1fr)",
+  gap: "var(--crm-space-3)",
 };
 
 const timelineIconStyle: CSSProperties = {
-  width: "38px",
-  height: "38px",
-  borderRadius: "12px",
+  width: "2.25rem",
+  height: "2.25rem",
+  borderRadius: "var(--crm-radius-md)",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
@@ -1786,25 +1811,24 @@ const timelineIconStyle: CSSProperties = {
 
 const timelineContentStyle: CSSProperties = {
   minWidth: 0,
-  border: "1px solid rgba(226, 232, 240, 0.8)",
-  borderRadius: "16px",
-  padding: "16px 20px",
-  background: "#ffffff",
-  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.03)",
-  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+  border: "1px solid rgba(255,255,255,0.32)",
+  borderRadius: "var(--crm-radius-md)",
+  padding: "var(--crm-space-3) var(--crm-space-4)",
+  background: "rgba(255,255,255,0.82)",
+  boxShadow: "0 0.5rem 1.25rem rgba(15, 23, 42, 0.08)",
 };
 
 const timelineItemHeaderStyle: CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  gap: "10px",
+  gap: "var(--crm-space-2)",
   color: "#111827",
-  fontSize: "13px",
+  fontSize: "0.86rem",
 };
 
 const timelineDescriptionStyle: CSSProperties = {
-  margin: "8px 0",
+  margin: "var(--crm-space-2) 0",
   color: "#374151",
   lineHeight: 1.5,
   overflowWrap: "anywhere",
@@ -1812,24 +1836,24 @@ const timelineDescriptionStyle: CSSProperties = {
 
 const timelineMetaStyle: CSSProperties = {
   color: "#64748b",
-  fontSize: "12px",
+  fontSize: "0.78rem",
   fontWeight: 700,
 };
 
 const leadListStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
+  gap: "var(--crm-space-2)",
 };
 
 const leadItemStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: "10px",
+  gap: "var(--crm-space-2)",
   border: "1px solid #e5e7eb",
-  borderRadius: "8px",
-  padding: "10px 12px",
+  borderRadius: "var(--crm-radius-md)",
+  padding: "var(--crm-space-2) var(--crm-space-3)",
 };
 
 const leadTitleStyle: CSSProperties = {
@@ -1845,8 +1869,8 @@ const leadStatusStyle: CSSProperties = {
   borderRadius: "999px",
   background: "#f1f5f9",
   color: "#475569",
-  padding: "4px 8px",
-  fontSize: "12px",
+  padding: "0.2rem var(--crm-space-2)",
+  fontSize: "0.78rem",
   fontWeight: 800,
   textTransform: "capitalize",
 };

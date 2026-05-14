@@ -92,8 +92,8 @@ export function SettingsButton() {
 }
 
 export const iconButtonStyle: CSSProperties = {
-  width: "38px",
-  height: "38px",
+  width: "var(--crm-control-height-md)",
+  height: "var(--crm-control-height-md)",
   flexShrink: 0,
   borderRadius: "999px",
   border: "1px solid rgba(255,255,255,0.18)",
@@ -112,7 +112,7 @@ const overlayStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  padding: "24px",
+  padding: "var(--crm-space-5)",
 };
 
 const backdropStyle: CSSProperties = {
@@ -126,10 +126,10 @@ const backdropStyle: CSSProperties = {
 
 const windowStyle: CSSProperties = {
   position: "relative",
-  width: "min(760px, calc(100vw - 48px))",
-  maxHeight: "calc(100vh - 48px)",
+  width: "min(54rem, calc(100vw - 2.5rem))",
+  maxHeight: "calc(100dvh - 2.5rem)",
   overflow: "auto",
-  borderRadius: "8px",
+  borderRadius: "var(--crm-radius-md)",
   background: "#fff",
   boxShadow: "0 24px 80px rgba(0,0,0,0.36)",
 };
@@ -147,15 +147,15 @@ const headerStyle: CSSProperties = {
 
 const tabsStyle: CSSProperties = {
   display: "flex",
-  padding: "10px 12px 0",
+  padding: "var(--crm-space-2) var(--crm-space-3) 0",
 };
 
 const activeTabStyle: CSSProperties = {
   border: "none",
-  borderBottom: "2px solid #2563eb",
+  borderBottom: "2px solid var(--crm-brand-primary)",
   background: "transparent",
   color: "#111827",
-  padding: "12px 14px",
+  padding: "var(--crm-space-3) var(--crm-space-3)",
   fontWeight: 700,
   cursor: "pointer",
 };
@@ -168,9 +168,9 @@ const tabStyle: CSSProperties = {
 };
 
 const closeButtonStyle: CSSProperties = {
-  width: "38px",
-  height: "38px",
-  marginRight: "12px",
+  width: "var(--crm-control-height-md)",
+  height: "var(--crm-control-height-md)",
+  marginRight: "var(--crm-space-3)",
   borderRadius: "999px",
   border: "1px solid #e5e7eb",
   background: "#fff",
@@ -182,5 +182,5 @@ const closeButtonStyle: CSSProperties = {
 };
 
 const contentStyle: CSSProperties = {
-  padding: "30px",
+  padding: "var(--crm-space-5)",
 };

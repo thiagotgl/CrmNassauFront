@@ -47,16 +47,16 @@ const containerStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: "12px",
-  paddingTop: "18px",
+  gap: "var(--crm-space-2)",
+  paddingTop: "var(--crm-space-3)",
   borderTop: "1px solid rgba(255,255,255,0.12)",
 };
 
 const emailStyle: CSSProperties = {
   minWidth: 0,
   flex: 1,
-  fontSize: "13px",
-  color: "#cbd5e1",
+  fontSize: "0.86rem",
+  color: "rgba(255,255,255,0.72)",
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
@@ -64,5 +64,5 @@ const emailStyle: CSSProperties = {
 
 const actionsStyle: CSSProperties = {
   display: "flex",
-  gap: "8px",
+  gap: "var(--crm-space-2)",
 };

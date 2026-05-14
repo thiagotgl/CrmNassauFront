@@ -11,7 +11,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { authFetch } from "@/components/auth-fetch";
 
@@ -102,8 +102,11 @@ function cleanDigits(value: string, maxLength: number) {
 
 export default function ContatosPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session, status } = useSession();
-  const [activeTab, setActiveTab] = useState<ActiveTab>("contatos");
+  const activeTab: ActiveTab = pathname.startsWith("/crm/empresas")
+    ? "empresas"
+    : "contatos";
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("ativos");
   const [search, setSearch] = useState("");
   const [contatos, setContatos] = useState<Contato[]>([]);
@@ -548,100 +551,57 @@ export default function ContatosPage() {
     <div style={pageStyle}>
       <style>{`
         .crm-data-row {
-          transition: background 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+          transition: background 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease, transform 0.16s ease;
         }
 
         .crm-data-row:hover {
-          background: #eef2ff !important;
-          box-shadow: inset 3px 0 0 #2563eb;
+          background: rgba(255,255,255,0.72) !important;
+          box-shadow: inset 3px 0 0 var(--crm-brand-orange);
+          transform: translateY(-1px);
         }
 
         .crm-data-row:focus-within {
-          background: #eff6ff !important;
-          box-shadow: inset 3px 0 0 #1d4ed8;
+          background: rgba(255,255,255,0.76) !important;
+          box-shadow: inset 3px 0 0 var(--crm-brand-orange);
         }
 
         .crm-data-row-inactive:hover {
-          background: #f8fafc !important;
+          background: rgba(255,255,255,0.54) !important;
           box-shadow: inset 3px 0 0 #94a3b8;
         }
       `}</style>
 
       <div style={headerStyle}>
-        <h1 style={titleStyle}>Contatos / Empresas</h1>
-
-        <button
-          type="button"
-          style={primaryButtonStyle}
-          onClick={() =>
-            activeTab === "contatos"
-              ? setContactModalOpen(true)
-              : setCompanyModalOpen(true)
-          }
-        >
-          <Plus size={18} strokeWidth={2.2} />
-          {activeTab === "contatos" ? "Novo contato" : "Nova empresa"}
-        </button>
-      </div>
-
-      <div style={toolbarStyle}>
-        <div style={tabsStyle}>
-          <button
-            type="button"
-            style={
-              activeTab === "contatos" ? activeTabButtonStyle : tabButtonStyle
-            }
-            onClick={() => setActiveTab("contatos")}
-          >
-            <UserRound size={17} strokeWidth={2.2} />
-            Contatos
-          </button>
-          <button
-            type="button"
-            style={
-              activeTab === "empresas" ? activeTabButtonStyle : tabButtonStyle
-            }
-            onClick={() => setActiveTab("empresas")}
-          >
-            <Building2 size={17} strokeWidth={2.2} />
-            Empresas
-          </button>
+        <div style={titleGroupStyle}>
+          <span style={titleIconStyle}>
+            {activeTab === "contatos" ? (
+              <UserRound size={19} strokeWidth={2.3} />
+            ) : (
+              <Building2 size={19} strokeWidth={2.3} />
+            )}
+          </span>
+          <div>
+            <h1 style={titleStyle}>
+              {activeTab === "contatos" ? "Contatos" : "Empresas"}
+            </h1>
+          </div>
         </div>
 
-        <div style={statusFilterStyle}>
-          {(["ativos", "inativos", "todos"] as StatusFilter[]).map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              style={
-                statusFilter === filter
-                  ? activeStatusFilterButtonStyle
-                  : statusFilterButtonStyle
-              }
-              onClick={() => setStatusFilter(filter)}
-            >
-              {filter === "ativos"
-                ? "Ativos"
-                : filter === "inativos"
-                  ? "Inativos"
-                  : "Todos"}
-            </button>
-          ))}
-        </div>
-
-        <label style={searchWrapperStyle}>
-          <Search size={17} strokeWidth={2.2} />
-          <input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder={
+        <div style={headerControlsStyle}>
+          <button
+            type="button"
+            style={createIconButtonStyle}
+            onClick={() =>
               activeTab === "contatos"
-                ? "Buscar por nome, telefone, email ou empresa"
-                : "Buscar por nome, CNPJ, telefone ou email"
+                ? setContactModalOpen(true)
+                : setCompanyModalOpen(true)
             }
-            style={searchInputStyle}
-          />
-        </label>
+            aria-label={activeTab === "contatos" ? "Novo contato" : "Nova empresa"}
+            title={activeTab === "contatos" ? "Novo contato" : "Nova empresa"}
+          >
+            <Plus size={20} strokeWidth={2.4} />
+          </button>
+        </div>
       </div>
 
       {selectedIds.length > 0 ? (
@@ -669,24 +629,65 @@ export default function ContatosPage() {
       ) : null}
 
       <div style={tableShellStyle}>
+        <div style={listControlsStyle}>
+          <div style={statusFilterStyle}>
+            {(["ativos", "inativos", "todos"] as StatusFilter[]).map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                style={
+                  statusFilter === filter
+                    ? activeStatusFilterButtonStyle
+                    : statusFilterButtonStyle
+                }
+                onClick={() => setStatusFilter(filter)}
+              >
+                {filter === "ativos"
+                  ? "Ativos"
+                  : filter === "inativos"
+                    ? "Inativos"
+                    : "Todos"}
+              </button>
+            ))}
+          </div>
+
+          <label style={searchWrapperStyle}>
+            <Search size={17} strokeWidth={2.2} />
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={
+                activeTab === "contatos"
+                  ? "Buscar por nome, telefone, email ou empresa"
+                  : "Buscar por nome, CNPJ, telefone ou email"
+              }
+              style={searchInputStyle}
+            />
+          </label>
+        </div>
+
         {activeTab === "contatos" ? (
-          <ContactsTable
-            loading={activeLoading}
-            contatos={filteredContatos}
-            selectedIds={selectedContatos}
-            onSelectAll={toggleSelectAllVisible}
-            onToggleSelected={toggleSelectedId}
-            onOpen={(id) => router.push(`/crm/contatos/contato/${id}`)}
-          />
+          <div style={tableScrollStyle}>
+            <ContactsTable
+              loading={activeLoading}
+              contatos={filteredContatos}
+              selectedIds={selectedContatos}
+              onSelectAll={toggleSelectAllVisible}
+              onToggleSelected={toggleSelectedId}
+              onOpen={(id) => router.push(`/crm/contatos/contato/${id}`)}
+            />
+          </div>
         ) : (
-          <CompaniesTable
-            loading={activeLoading}
-            empresas={filteredEmpresas}
-            selectedIds={selectedEmpresas}
-            onSelectAll={toggleSelectAllVisible}
-            onToggleSelected={toggleSelectedId}
-            onOpen={(id) => router.push(`/crm/contatos/empresa/${id}`)}
-          />
+          <div style={tableScrollStyle}>
+            <CompaniesTable
+              loading={activeLoading}
+              empresas={filteredEmpresas}
+              selectedIds={selectedEmpresas}
+              onSelectAll={toggleSelectAllVisible}
+              onToggleSelected={toggleSelectedId}
+              onOpen={(id) => router.push(`/crm/contatos/empresa/${id}`)}
+            />
+          </div>
         )}
       </div>
 
@@ -1364,7 +1365,7 @@ const pageStyle: CSSProperties = {
   height: "100%",
   display: "flex",
   flexDirection: "column",
-  gap: "12px",
+  gap: "var(--crm-space-3)",
   minWidth: 0,
 };
 
@@ -1372,112 +1373,138 @@ const headerStyle: CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  gap: "14px",
+  gap: "var(--crm-space-3)",
+  flexWrap: "nowrap",
+  padding: "var(--crm-space-1) 0",
+};
+
+const titleGroupStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: "var(--crm-space-2)",
+  minWidth: 0,
+  flex: "0 0 auto",
+};
+
+const titleIconStyle: CSSProperties = {
+  width: "2.5rem",
+  height: "2.5rem",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "rgba(249,115,22,0.18)",
+  border: "1px solid rgba(253,186,116,0.42)",
+  color: "#fff",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+};
+
+const headerControlsStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  gap: "var(--crm-space-2)",
+  flex: "0 0 auto",
+  flexWrap: "nowrap",
 };
 
 const titleStyle: CSSProperties = {
   margin: 0,
-  fontSize: "22px",
-  fontWeight: 700,
-};
-
-const toolbarStyle: CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  gap: "12px",
-  flexWrap: "wrap",
-};
-
-const tabsStyle: CSSProperties = {
-  display: "inline-flex",
-  gap: "6px",
-  padding: "4px",
-  borderRadius: "8px",
-  background: "rgba(255,255,255,0.08)",
+  color: "#fff",
+  fontSize: "1.45rem",
+  fontWeight: 800,
 };
 
 const statusFilterStyle: CSSProperties = {
   display: "inline-flex",
-  gap: "4px",
-  padding: "4px",
-  borderRadius: "8px",
-  background: "rgba(255,255,255,0.08)",
+  gap: "var(--crm-space-1)",
+  padding: "var(--crm-space-1)",
+  borderRadius: "var(--crm-radius-md)",
+  background: "rgba(255,255,255,0.1)",
+  border: "1px solid rgba(255,255,255,0.18)",
 };
 
 const statusFilterButtonStyle: CSSProperties = {
   border: "none",
-  borderRadius: "6px",
+  borderRadius: "var(--crm-radius-sm)",
   background: "transparent",
-  color: "#cbd5e1",
-  padding: "7px 10px",
+  color: "rgba(255,255,255,0.76)",
+  minHeight: "var(--crm-control-height-sm)",
+  padding: "0 var(--crm-space-3)",
   cursor: "pointer",
   fontWeight: 700,
 };
 
 const activeStatusFilterButtonStyle: CSSProperties = {
   ...statusFilterButtonStyle,
-  background: "#fff",
-  color: "#111827",
-};
-
-const tabButtonStyle: CSSProperties = {
-  border: "none",
-  borderRadius: "6px",
-  background: "transparent",
-  color: "#cbd5e1",
-  padding: "7px 10px",
-  cursor: "pointer",
-  display: "inline-flex",
-  alignItems: "center",
-  gap: "8px",
-  fontWeight: 700,
-};
-
-const activeTabButtonStyle: CSSProperties = {
-  ...tabButtonStyle,
-  background: "#fff",
-  color: "#111827",
+  background: "rgba(255,255,255,0.74)",
+  color: "var(--crm-brand-primary)",
 };
 
 const searchWrapperStyle: CSSProperties = {
-  flex: "1 1 320px",
-  maxWidth: "520px",
-  minWidth: "240px",
+  flex: "1 1 28rem",
+  maxWidth: "36rem",
+  minWidth: "18rem",
   display: "flex",
   alignItems: "center",
-  gap: "10px",
-  padding: "8px 10px",
-  borderRadius: "8px",
-  background: "#fff",
-  color: "#64748b",
+  gap: "var(--crm-space-2)",
+  minHeight: "var(--crm-control-height-md)",
+  padding: "0 var(--crm-space-3)",
+  borderRadius: "var(--crm-radius-md)",
+  background: "rgba(255,255,255,0.54)",
+  border: "1px solid rgba(255,255,255,0.28)",
+  color: "var(--crm-brand-primary)",
 };
 
 const searchInputStyle: CSSProperties = {
   width: "100%",
   border: "none",
   outline: "none",
-  color: "#111827",
-  fontSize: "14px",
+  color: "var(--crm-text-strong)",
+  fontSize: "0.93rem",
+  background: "transparent",
 };
 
 const tableShellStyle: CSSProperties = {
   flex: 1,
   minHeight: 0,
+  overflow: "hidden",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "rgba(255,255,255,0.36)",
+  border: "1px solid rgba(255,255,255,0.2)",
+  backdropFilter: "blur(18px)",
+  boxShadow: "0 1rem 2.5rem rgba(15,23,42,0.14)",
+  display: "flex",
+  flexDirection: "column",
+};
+
+const listControlsStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "var(--crm-space-3)",
+  padding: "var(--crm-space-3)",
+  borderBottom: "1px solid rgba(255,255,255,0.32)",
+  background: "rgba(255,255,255,0.08)",
+  flexShrink: 0,
+};
+
+const tableScrollStyle: CSSProperties = {
+  flex: 1,
+  minHeight: 0,
   overflow: "auto",
-  borderRadius: "8px",
-  background: "#fff",
 };
 
 const bulkBarStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: "12px",
-  padding: "9px 12px",
-  borderRadius: "8px",
-  background: "#fff",
-  color: "#111827",
+  gap: "var(--crm-space-3)",
+  padding: "var(--crm-space-2) var(--crm-space-3)",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "rgba(255,255,255,0.46)",
+  border: "1px solid rgba(255,255,255,0.24)",
+  color: "var(--crm-text-strong)",
 };
 
 const bulkActionsStyle: CSSProperties = {
@@ -1496,9 +1523,9 @@ const contactHeaderRowStyle: CSSProperties = {
   display: "grid",
   gridTemplateColumns: "28px 1.2fr 150px 1.2fr 1fr 100px",
   gap: "12px",
-  padding: "9px 14px",
-  background: "#f8fafc",
-  color: "#475569",
+  padding: "10px 14px",
+  background: "rgba(255,255,255,0.3)",
+  color: "#334155",
   fontSize: "12px",
   fontWeight: 800,
   textTransform: "uppercase",
@@ -1506,14 +1533,14 @@ const contactHeaderRowStyle: CSSProperties = {
 
 const contactRowStyle: CSSProperties = {
   ...contactHeaderRowStyle,
-  minHeight: "46px",
+  minHeight: "48px",
   alignItems: "center",
-  background: "#fff",
+  background: "rgba(255,255,255,0.48)",
   color: "#111827",
   fontSize: "14px",
   fontWeight: 400,
   textTransform: "none",
-  borderTop: "1px solid #e5e7eb",
+  borderTop: "1px solid rgba(226,232,240,0.78)",
   cursor: "pointer",
 };
 
@@ -1521,9 +1548,9 @@ const companyHeaderRowStyle: CSSProperties = {
   display: "grid",
   gridTemplateColumns: "28px 1.3fr 150px 150px 1.2fr 100px 100px",
   gap: "12px",
-  padding: "9px 14px",
-  background: "#f8fafc",
-  color: "#475569",
+  padding: "10px 14px",
+  background: "rgba(255,255,255,0.3)",
+  color: "#334155",
   fontSize: "12px",
   fontWeight: 800,
   textTransform: "uppercase",
@@ -1531,14 +1558,14 @@ const companyHeaderRowStyle: CSSProperties = {
 
 const companyRowStyle: CSSProperties = {
   ...companyHeaderRowStyle,
-  minHeight: "46px",
+  minHeight: "48px",
   alignItems: "center",
-  background: "#fff",
+  background: "rgba(255,255,255,0.48)",
   color: "#111827",
   fontSize: "14px",
   fontWeight: 400,
   textTransform: "none",
-  borderTop: "1px solid #e5e7eb",
+  borderTop: "1px solid rgba(226,232,240,0.78)",
   cursor: "pointer",
 };
 
@@ -1574,23 +1601,40 @@ const stateTextStyle: CSSProperties = {
 
 const primaryButtonStyle: CSSProperties = {
   border: "none",
-  borderRadius: "8px",
-  background: "#2563eb",
+  borderRadius: "var(--crm-radius-md)",
+  background: "var(--crm-brand-orange)",
   color: "#fff",
-  padding: "9px 12px",
+  minHeight: "var(--crm-control-height-md)",
+  padding: "0 var(--crm-space-3)",
   cursor: "pointer",
   fontWeight: 800,
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
   gap: "8px",
+  whiteSpace: "nowrap",
+};
+
+const createIconButtonStyle: CSSProperties = {
+  width: "2.5rem",
+  height: "2.5rem",
+  border: "1px solid rgba(253,186,116,0.42)",
+  borderRadius: "var(--crm-radius-lg)",
+  background: "var(--crm-brand-orange)",
+  color: "#fff",
+  cursor: "pointer",
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: "0 0.75rem 1.5rem rgba(234,88,12,0.26)",
+  flexShrink: 0,
 };
 
 const secondaryButtonStyle: CSSProperties = {
   ...primaryButtonStyle,
-  border: "1px solid #d1d5db",
-  background: "#fff",
-  color: "#111827",
+  border: "1px solid rgba(255,255,255,0.32)",
+  background: "rgba(255,255,255,0.56)",
+  color: "var(--crm-brand-primary)",
 };
 
 const overlayStyle: CSSProperties = {

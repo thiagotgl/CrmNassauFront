@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
   ChartNoAxesColumnIncreasing,
+  Building2,
   ChevronLeft,
   ChevronRight,
   ContactRound,
-  Home,
 } from "lucide-react";
 import { UserSessionFooter } from "@/components/user-session-footer";
 
@@ -15,17 +15,17 @@ const SIDEBAR_STORAGE_KEY = "crm-sidebar-collapsed";
 
 const menuItems = [
   {
-    label: "Inicio",
-    path: "/crm",
-    icon: Home,
-  },
-  {
     label: "Leads",
     path: "/crm/leads",
     icon: ChartNoAxesColumnIncreasing,
   },
   {
-    label: "Contatos / Empresas",
+    label: "Empresas",
+    path: "/crm/empresas",
+    icon: Building2,
+  },
+  {
+    label: "Contatos",
     path: "/crm/contatos",
     icon: ContactRound,
   },
@@ -66,43 +66,35 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-        @keyframes gradientMove {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        @keyframes glowPulse {
-          0% { text-shadow: 0 0 10px rgba(59,130,246,0.2); }
-          50% { text-shadow: 0 0 25px rgba(59,130,246,0.6); }
-          100% { text-shadow: 0 0 10px rgba(59,130,246,0.2); }
-        }
-
         .menu-item {
           width: 100%;
           border: none;
-          padding: 12px 14px;
-          border-radius: 10px;
+          min-height: var(--crm-control-height-md);
+          padding: 0 var(--crm-space-3);
+          border-radius: var(--crm-radius-md);
           cursor: pointer;
           transition: background 0.2s, color 0.2s, justify-content 0.2s;
           display: flex;
           justify-content: flex-start;
           align-items: center;
-          gap: 12px;
+          gap: var(--crm-space-2);
           background: transparent;
-          color: #fff;
+          color: rgba(255,255,255,0.82);
           font: inherit;
+          font-size: 0.93rem;
+          font-weight: 600;
           text-align: left;
         }
 
         .menu-item:hover {
-          background: rgba(255,255,255,0.1);
+          background: rgba(255,255,255,0.12);
+          color: #ffffff;
         }
 
         .active {
-          background: rgba(255,255,255,0.2);
+          background: rgba(255,255,255,0.18);
+          color: #ffffff;
+          box-shadow: inset 3px 0 0 var(--crm-brand-orange);
         }
 
         .menu-item-collapsed {
@@ -122,8 +114,12 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
         <div
           style={{
             ...sidebarStyle,
-            width: sidebarCollapsed ? "76px" : "260px",
-            padding: sidebarCollapsed ? "18px 12px" : "20px",
+            width: sidebarCollapsed
+              ? "var(--crm-sidebar-collapsed-width)"
+              : "var(--crm-sidebar-width)",
+            padding: sidebarCollapsed
+              ? "var(--crm-space-4) var(--crm-space-2)"
+              : "var(--crm-space-4)",
           }}
         >
           <div
@@ -136,11 +132,11 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
               type="button"
               style={{
                 ...brandStyle,
-                width: sidebarCollapsed ? "38px" : "auto",
-                height: sidebarCollapsed ? "38px" : "auto",
+                width: sidebarCollapsed ? "2.25rem" : "auto",
+                height: sidebarCollapsed ? "2.25rem" : "auto",
                 justifyContent: sidebarCollapsed ? "center" : "flex-start",
-                fontSize: sidebarCollapsed ? "24px" : "22px",
-                letterSpacing: sidebarCollapsed ? 0 : "2px",
+                fontSize: sidebarCollapsed ? "1.35rem" : "1.2rem",
+                letterSpacing: sidebarCollapsed ? 0 : "0.08rem",
               }}
               onClick={() => router.push("/home")}
               aria-label="Voltar para home"
@@ -192,7 +188,7 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
                   title={sidebarCollapsed ? item.label : undefined}
                   aria-label={item.label}
                 >
-                  <Icon size={20} strokeWidth={2.2} />
+                  <Icon size={18} strokeWidth={2.2} />
                   {!sidebarCollapsed ? (
                     <span className="menu-label">{item.label}</span>
                   ) : null}
@@ -212,16 +208,18 @@ export default function CRMLayout({ children }: { children: React.ReactNode }) {
 
 const containerStyle: React.CSSProperties = {
   display: "flex",
-  height: "100vh",
+  height: "100dvh",
   overflow: "hidden",
-  fontFamily: "Poppins, sans-serif",
-  background: "linear-gradient(270deg, #1e293b, #1e40af, #0f172a)",
+  fontFamily: "var(--crm-font-family)",
+  background:
+    "linear-gradient(135deg, var(--crm-brand-navy) 0%, var(--crm-brand-primary) 48%, var(--crm-brand-cyan) 100%)",
 };
 
 const sidebarStyle: React.CSSProperties = {
   color: "#fff",
-  backdropFilter: "blur(10px)",
-  background: "rgba(0,0,0,0.2)",
+  background:
+    "linear-gradient(180deg, rgba(15,23,42,0.96) 0%, rgba(30,64,175,0.92) 100%)",
+  borderRight: "1px solid rgba(255,255,255,0.18)",
   display: "flex",
   flexDirection: "column",
   maxHeight: "100vh",
@@ -232,17 +230,17 @@ const sidebarStyle: React.CSSProperties = {
 const topBarStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: "12px",
-  marginBottom: "20px",
+  gap: "var(--crm-space-2)",
+  marginBottom: "var(--crm-space-3)",
 };
 
 const menuContentStyle: React.CSSProperties = {
   flex: 1,
-  marginTop: "20px",
+  marginTop: "var(--crm-space-3)",
   overflowY: "auto",
   display: "flex",
   flexDirection: "column",
-  gap: "6px",
+  gap: "var(--crm-space-1)",
 };
 
 const brandStyle: React.CSSProperties = {
@@ -250,31 +248,28 @@ const brandStyle: React.CSSProperties = {
   padding: 0,
   cursor: "pointer",
   fontWeight: "900",
-  background: "linear-gradient(270deg, #60a5fa, #1e40af, #0ea5e9)",
-  backgroundSize: "400% 400%",
-  animation: "gradientMove 6s ease infinite, glowPulse 3s ease-in-out infinite",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
+  color: "#fff",
+  background: "transparent",
   display: "inline-flex",
   alignItems: "center",
   flexShrink: 0,
 };
 
 const logoUnderline: React.CSSProperties = {
-  height: "3px",
+  height: "2px",
   borderRadius: "10px",
-  background: "linear-gradient(90deg, #60a5fa, transparent)",
-  marginTop: "4px",
-  width: "90px",
+  background: "linear-gradient(90deg, var(--crm-brand-orange), rgba(255,255,255,0.35))",
+  marginTop: "var(--crm-space-1)",
+  width: "5rem",
 };
 
 const toggleButtonStyle: React.CSSProperties = {
-  width: "36px",
-  height: "36px",
+  width: "var(--crm-control-height-md)",
+  height: "var(--crm-control-height-md)",
   flexShrink: 0,
   borderRadius: "999px",
-  border: "1px solid rgba(255,255,255,0.18)",
-  background: "rgba(255,255,255,0.08)",
+  border: "1px solid rgba(255,255,255,0.22)",
+  background: "rgba(255,255,255,0.1)",
   color: "#fff",
   cursor: "pointer",
   display: "inline-flex",
@@ -284,13 +279,15 @@ const toggleButtonStyle: React.CSSProperties = {
 
 const collapsedToggleStyle: React.CSSProperties = {
   alignSelf: "center",
-  marginBottom: "4px",
+  marginBottom: "var(--crm-space-1)",
 };
 
 const contentStyle: React.CSSProperties = {
   flex: 1,
-  padding: "40px",
+  padding: "var(--crm-page-padding)",
   color: "#fff",
   minWidth: 0,
   overflow: "hidden",
+  background:
+    "linear-gradient(135deg, rgba(15,23,42,0.08) 0%, rgba(30,64,175,0.2) 100%)",
 };
