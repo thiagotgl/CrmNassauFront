@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthSessionProvider } from "@/components/auth-session-provider";
+import { ToastProvider } from "@/components/toast-provider";
 
 export const metadata: Metadata = {
   title: "Global CRM",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <AuthSessionProvider>{children}</AuthSessionProvider>
+        <ToastProvider>
+          <AuthSessionProvider>{children}</AuthSessionProvider>
+        </ToastProvider>
       </body>
     </html>
   );
